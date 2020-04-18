@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import HTMLParser from "react-html-parser";
 
-function BlogEditor({ loading, toggleLoading }) {
+function BlogEditor() {
     const [content, setContent] = useState("");
     const handleEditorChange = (newContent, editor) => {
         console.log(newContent);
@@ -31,12 +31,6 @@ function BlogEditor({ loading, toggleLoading }) {
                             input.addEventListener("change", function () {
                                 var file = this.files[0];
                                 var reader = new FileReader();
-                                reader.onloadstart = () => {
-                                    toggleLoading(true);
-                                };
-                                reader.onloadend = () => {
-                                    toggleLoading(false);
-                                };
                                 reader.onload = function (e) {
                                     callback(e.target.result, {
                                         alt: "Write the alt text here",
