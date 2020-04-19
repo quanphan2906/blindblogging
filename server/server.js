@@ -20,9 +20,9 @@ app.use("/api", router);
 
 //error handling
 const errorHandler = require("./error_handler/errorHandler");
-errorHandler(app);
+app.use(errorHandler);
 
 //listen to new port
 server.listen(config.PORT, () => {
-    console.log("listen to port " + config.PORT);
+  console.log("listen to port " + config.PORT);
 });
