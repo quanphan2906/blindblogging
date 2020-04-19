@@ -6,6 +6,21 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 
+//connect to db
+const mongoose = require("mongoose");
+mongoose
+  .connect(config.MONGO_ATLAS_URL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    console.log("connected to db");
+  })
+  .catch(() => {
+    console.log("error connect to db");
+  });
+
 //allow CORS
 const cors = require("cors");
 app.use(cors());
@@ -19,8 +34,7 @@ const router = require("./routes/index");
 app.use("/api", router);
 
 //error handling
-const errorHandler = require("./error_handler/errorHandler");
-app.use(errorHandler);
+require("./error_handler/errorHandler")(app);
 
 //listen to new port
 server.listen(config.PORT, () => {
