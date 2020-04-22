@@ -20,10 +20,14 @@ mongoose
   .catch(() => {
     console.log("error connect to db");
   });
+mongoose.set("useFindAndModify", false);
 
 //allow CORS
 const cors = require("cors");
 app.use(cors());
+
+//serve image (static) files
+app.use("/uploads", express.static("uploads"));
 
 //parse data
 app.use(express.json());

@@ -20,13 +20,15 @@ const UserSchema = new Schema(
     },
     //if name is null -> set name = email
     profileImageUrl: { type: String },
-    occupation: { type: String },
-    description: { type: String },
+    occupation: { type: String, trim: true },
+    description: { type: String, trim: true },
   },
   {
     timestamps: true,
   }
 );
+
+UserSchema.index({ email: "text", name: "text" });
 
 const model = mongoose.model;
 module.exports = model("User", UserSchema);

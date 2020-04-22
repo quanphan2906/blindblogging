@@ -1,10 +1,35 @@
 const router = require("express").Router();
 
-router.get("/");
-//getting comments with id of a post
+const CommentModel = require("../models/CommentModel");
 
-router.post("/create");
+//getting comments with id of a post
+router.get("/", async (req, res, next) => {
+  const { postId: post } = req.query;
+
+  const comments = await CommentModel.find({ post })
+    .populate("commentor", "_id name profileImageUrl")
+    .sort({ createdAt: -1 })
+    .exec();
+
+  res.json({ comments });
+});
+
+//-----USE SOCKET.IO FOR THE BELOW--------//
+
 //create a comment, in the req.body needs postId and userId
+//TEST ONLY
+//TODO: DELETE WHEN SOCKET.IO IS OUT
+router.post("/create", async (req, res, next) => {
+  const { post, commentor, content } = req.body;
+
+  const comment = await CommentModel.create({
+    post,
+    commentor,
+    content,
+  });
+
+  res.json({ comment });
+});
 
 router.put("/:id");
 //changing content of a comment
