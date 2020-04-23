@@ -9,25 +9,22 @@ const server = http.createServer(app);
 //connect to db
 const mongoose = require("mongoose");
 mongoose
-  .connect(config.MONGO_ATLAS_URL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    console.log("connected to db");
-  })
-  .catch(() => {
-    console.log("error connect to db");
-  });
+    .connect(config.MONGO_ATLAS_URL, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+    })
+    .then(() => {
+        console.log("connected to db");
+    })
+    .catch(() => {
+        console.log("error connect to db");
+    });
 mongoose.set("useFindAndModify", false);
 
 //allow CORS
 const cors = require("cors");
 app.use(cors());
-
-//serve image (static) files
-app.use("/uploads", express.static("uploads"));
 
 //parse data
 app.use(express.json());
@@ -42,5 +39,5 @@ require("./error_handler/errorHandler")(app);
 
 //listen to new port
 server.listen(config.PORT, () => {
-  console.log("listen to port " + config.PORT);
+    console.log("listen to port " + config.PORT);
 });

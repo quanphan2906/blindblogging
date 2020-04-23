@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import HTMLParser from "react-html-parser";
 
-function BlogEditor() {
-    const [content, setContent] = useState("");
-    const handleEditorChange = (newContent, editor) => {
-        console.log(newContent);
-        setContent(newContent);
-    };
+function BlogEditor({ handleEditorChange, content }) {
     return (
         <div>
             <Editor

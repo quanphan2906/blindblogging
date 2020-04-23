@@ -1,7 +1,10 @@
-@import "./loader.css";
-@import "./modal.css";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import "./Loader.css";
+@import "./Modal.css";
+@import "./Button.css";
+@import "./BlogEditPage.css";
 
-body {
+/* body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
@@ -13,6 +16,13 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
+} */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", sans-serif;
+    background-color: rgba(196, 196, 196, 0.25);
 }
 
 .hidden {
