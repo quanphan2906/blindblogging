@@ -4,7 +4,7 @@ import HTMLParser from "react-html-parser";
 
 function BlogEditor({ handleEditorChange, content }) {
     return (
-        <div>
+        <div className="blog-editor">
             <Editor
                 apiKey="ggbytbuql282pp1ll5ctzytdqxnewwkvvu7skgjcknxvtu7z"
                 init={{
@@ -47,7 +47,7 @@ function BlogEditor({ handleEditorChange, content }) {
                 id="upload"
                 className="hidden"
             ></input>
-            <div>{HTMLParser(content)}</div>
+            {/* <div>{HTMLParser(content)}</div> */}
         </div>
     );
 }

@@ -3,6 +3,7 @@
 @import "./Modal.css";
 @import "./Button.css";
 @import "./BlogEditPage.css";
+@import "./Auth.css";
 
 /* body {
     margin: 0;
@@ -22,7 +23,11 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Open Sans", sans-serif;
-    background-color: rgba(196, 196, 196, 0.25);
+    background-color: rgba(196, 196, 196, 0.15);
+}
+
+.form-error {
+    color: red;
 }
 
 .hidden {

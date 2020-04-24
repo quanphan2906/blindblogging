@@ -14,8 +14,20 @@ function App() {
         <BrowserRouter>
             <Navbar />
             <Switch>
-                <Route exact path="/register" component={Auth} />
-                <Route exact path="/login" component={Auth} />
+                <Route
+                    exact
+                    path="/register"
+                    render={(routeProps) => (
+                        <Auth authState="signup" {...routeProps} />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/login"
+                    render={(routeProps) => (
+                        <Auth authState="signin" {...routeProps} />
+                    )}
+                />
                 <Route exact path={["/", "/home"]} component={HomePage} />
                 <Route exact path="/blog/list" component={BlogList} />
                 <Route exact path="/blog/create" component={BlogEditPage} />
