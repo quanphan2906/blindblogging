@@ -2,8 +2,9 @@ import React from "react";
 import Button from "../common/Button";
 import coverImg from "../../assets/anete-lusina-zwsHjakE_iI-unsplash.jpg";
 import { useState } from "react";
-import axios from "axios";
+import Axios from "axios";
 import endpoints from "../../api_config/endpoints";
+import errorHandler from "../../api_config/errorHandler";
 
 function Auth(props) {
     const authState = props.authState;
@@ -26,7 +27,7 @@ function Auth(props) {
         setAuth({ ...auth, [e.target.id]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!auth.email) {
@@ -47,43 +48,57 @@ function Auth(props) {
             const authObj = { email: auth.email, password: auth.password };
 
             if (authState === "signup") {
-                axios
-                    .post(endpoints.REGISTER_USER(), authObj)
-                    .then(({ data: { message } }) => {
-                        if (message === "success") {
-                            props.history.push("/login");
-                        }
-                    })
-                    .catch(({ message, statusCode }) => {
-                        console.log(statusCode + " " + message);
-                    });
+                try {
+                    const res = await Axios.post(
+                        endpoints.REGISTER_USER(),
+                        authObj
+                    );
+                    const {
+                        data: { message },
+                    } = res;
+                    if (message === "success") {
+                        props.history.push("/login");
+                    }
+                } catch (err) {
+                    errorHandler(err);
+                }
             }
-
             if (authState === "signin") {
-                axios
-                    .post(endpoints.LOGIN_USER(), authObj)
-                    .then(({ message, token }) => {
-                        if (message === "success") {
-                            localStorage.setItem("JWT token", token);
-                        }
-                    })
-                    .catch(({ message, statusCode }) => {
-                        console.log(statusCode + " " + message);
-                    });
+                try {
+                    const res = await Axios.post(
+                        endpoints.LOGIN_USER(),
+                        authObj
+                    );
+                    const {
+                        data: { message, token, expiresIn },
+                    } = res;
+                    if (message === "success") {
+                        const now = new Date();
+                        const expiry = now.getTime() + expiresIn;
+                        const tokenObj = { token, expiry };
+
+                        localStorage.setItem(
+                            "JWT token",
+                            JSON.stringify(tokenObj)
+                        );
+                    }
+                } catch (err) {
+                    errorHandler(err);
+                }
             }
         }
     };
 
     return (
-        <div className="auth-wrapper">
+        <main className="auth-wrapper">
             <div className="auth-container">
                 <div className="cover-image-container">
                     <img src={coverImg} alt="" />
                 </div>
                 <div className="slogan">
-                    <h3 className="text-align-center">
+                    <h1 className="text-align-center">
                         Welcome to BlindBlogging
-                    </h3>
+                    </h1>
                     <p className="text-align-center">
                         At blindblogging, we make blogging accessible for the
                         visually impaired. Anyone can tell stories of
@@ -127,7 +142,7 @@ function Auth(props) {
                     <Button color="red" action={capitalize(authState)} />
                 </form>
             </div>
-        </div>
+        </main>
     );
 }
 

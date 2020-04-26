@@ -44,15 +44,18 @@ router.post("/login", async (req, res, next) => {
         const compare = await bcrypt.compare(req.body.password, user.password);
         if (!compare) return res.json({ message: "incorrectPassword" });
 
+        const expiresIn = 3; //in terms of hours
+        const expiresInString = expiresIn.toString() + "h";
+
         const token = jwt.sign(
             { email: user.email, userId: user._id },
             config.JWT_SECRET,
-            {
-                expiresIn: "3h",
-            }
+            { expiresIn: expiresInString }
         );
 
-        res.json({ message: "success", token });
+        const expiredInMilisec = expiresIn * 3600000;
+
+        res.json({ message: "success", token, expiresIn: expiredInMilisec });
     } catch (err) {
         next(err);
     }

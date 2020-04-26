@@ -1,5 +1,6 @@
 const PORT = "http://localhost:5000";
-export default {
+
+const endpoints = {
     REGISTER_USER: () => `${PORT}/api/users/register`,
     LOGIN_USER: () => `${PORT}/api/users/login`,
     GET_PROFILES: () => `${PORT}/api/users/profiles`,
@@ -9,7 +10,8 @@ export default {
     CREATE_POST: () => `${PORT}/api/posts/create`,
     GET_POST_ID: (id) => `${PORT}/api/posts/${id}`,
     PUT_POST_ID: (id) => `${PORT}/api/posts/${id}`,
-    PUT_POST_ID: (id) => `${PORT}/api/posts/${id}`,
     GET_COMMENTS: (postId) => `${PORT}/api/comments/${postId}`,
-    GET_IMAGE: (fileUrl) => `${PORT}/api/uploads/${fileUrl}`,
+    GET_IMAGE: (fileUrl) => `${PORT}/api/${fileUrl}`,
 };
+
+export default endpoints;

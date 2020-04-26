@@ -3,7 +3,7 @@ import React from "react";
 function ImageUpload({ previewImgUrl, handleFileSelected, handleChange }) {
     return (
         <div className="upload-wrapper">
-            <h3>Upload cover image</h3>
+            <h1>Upload cover image</h1>
             <div className="upload-container">
                 <img
                     src={previewImgUrl}

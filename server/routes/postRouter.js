@@ -116,7 +116,9 @@ router
         },
         async (req, res, next) => {
             try {
-                const post = await PostModel.findById(req.params.id).exec();
+                const post = await PostModel.findById(req.params.id)
+                    .populate("author", "-password")
+                    .exec();
                 res.locals.post = post._doc;
                 if (req.method === "GET") return next();
 
@@ -134,7 +136,11 @@ router
         try {
             const post = res.locals.post;
 
-            post.comments = await CommentModel.find({ post: post._id }); //TODO: test this when writing comment routes
+            post.comments = await CommentModel.find({
+                post: post._id,
+            })
+                .populate("commentor", "name profileImageUrl altText updatedAt")
+                .exec(); //TODO: test this when writing comment routes
 
             res.json({ post });
         } catch (err) {
