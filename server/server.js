@@ -37,6 +37,14 @@ app.use("/api", router);
 //error handling
 require("./error_handler/errorHandler")(app);
 
+//set up websocket
+const socketio = require("socket.io");
+const io = socketio(server);
+io.on("connection", (socket) => {
+    console.log("websocket is opened");
+    require("./socket_event_handlers/index")(io, socket);
+});
+
 //listen to new port
 server.listen(config.PORT, () => {
     console.log("listen to port " + config.PORT);

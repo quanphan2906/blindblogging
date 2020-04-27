@@ -35,7 +35,7 @@ function Auth(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const errorTemp = {...error};
+        const errorTemp = { ...error };
         if (!auth.email) {
             errorTemp.email = "Please input your email";
         }
@@ -119,7 +119,7 @@ function Auth(props) {
                 setFormMessage("Login fail. Please try again");
             }
         } else {
-            setError({ ...errorTemp });
+            setError(errorTemp);
         }
     };
     return (

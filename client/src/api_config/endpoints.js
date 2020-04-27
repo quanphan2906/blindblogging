@@ -1,4 +1,4 @@
-const PORT = "http://localhost:5000";
+export const PORT = "http://localhost:5000";
 
 const endpoints = {
     REGISTER_USER: () => `${PORT}/api/users/register`,

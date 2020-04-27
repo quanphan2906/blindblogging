@@ -191,3 +191,13 @@
     padding: 12px;
     box-sizing: border-box;
 }
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .comments-wrapper
+    .comment-container
+    .button-container {
+    display: flex;
+    justify-content: flex-end;
+}

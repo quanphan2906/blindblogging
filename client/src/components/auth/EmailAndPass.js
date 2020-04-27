@@ -20,13 +20,19 @@ function EmailAndPass({
                 <label htmlFor="email">Email</label>
                 <input type="email" id="email" onChange={handleChange} />
             </div>
-            <div className="form-error"> {error.email} </div>
+            <div className="form-error" role="alert">
+                {error.email}
+            </div>
             <div className="form-grid">
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" onChange={handleChange} />
             </div>
-            <div className="form-error"> {error.password} </div>
-            <div className="form-error"> {formMessage} </div>
+            <div className="form-error" role="alert">
+                {error.password}
+            </div>
+            <div className="form-error" role="alert">
+                {formMessage}
+            </div>
             <Button color="red" action={capitalize(authState)} />
         </form>
     );

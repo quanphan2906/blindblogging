@@ -5,7 +5,10 @@ function Intro() {
     return (
         <>
             <div className="cover-image-container">
-                <img src={coverImg} alt="" />
+                <img
+                    src={coverImg}
+                    alt="An open laptop is placed on a table along with a book"
+                />
             </div>
             <div className="slogan">
                 <h1 className="text-align-center">Welcome to BlindBlogging</h1>
