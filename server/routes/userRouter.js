@@ -2,13 +2,11 @@ const router = require("express").Router();
 
 const UserModel = require("../models/UserModel");
 
-const config = require("../config/config");
-
 const checkAuth = require("../helpers/checkAuth");
 const upload = require("../helpers/multerConfig");
+const signJwt = require("../helpers/signJwt");
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 //create new user
@@ -18,7 +16,11 @@ router.post("/register", async (req, res, next) => {
             email: req.body.email,
         }).exec();
         if (existedEmail) {
-            return res.json({ message: "existedEmail" });
+            return res.json({
+                message: "existedEmail",
+                token: null,
+                expiresIn: null,
+            });
         }
 
         const hash = await bcrypt.hash(req.body.password, 10);
@@ -29,7 +31,9 @@ router.post("/register", async (req, res, next) => {
             name: req.body.email,
         });
 
-        res.json({ message: "success" });
+        const { token, expiredInMilisec } = signJwt(user.email, user._id);
+
+        res.json({ message: "success", token, expiresIn: expiredInMilisec });
     } catch (err) {
         next(err);
     }
@@ -39,23 +43,28 @@ router.post("/register", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
     try {
         const user = await UserModel.findOne({ email: req.body.email }).exec();
-        if (!user) return res.json({ message: "notRegistered" });
+        if (!user)
+            return res.json({
+                message: "notRegistered",
+                token: null,
+                expiresIn: null,
+            });
 
         const compare = await bcrypt.compare(req.body.password, user.password);
-        if (!compare) return res.json({ message: "incorrectPassword" });
+        if (!compare)
+            return res.json({
+                message: "incorrectPassword",
+                token: null,
+                expiresIn: null,
+            });
 
-        const expiresIn = 3; //in terms of hours
-        const expiresInString = expiresIn.toString() + "h";
+        const { token, expiredInMilisec } = signJwt(user.email, user._id);
 
-        const token = jwt.sign(
-            { email: user.email, userId: user._id },
-            config.JWT_SECRET,
-            { expiresIn: expiresInString }
-        );
-
-        const expiredInMilisec = expiresIn * 3600000;
-
-        res.json({ message: "success", token, expiresIn: expiredInMilisec });
+        res.json({
+            message: "success",
+            token,
+            expiresIn: expiredInMilisec,
+        });
     } catch (err) {
         next(err);
     }
