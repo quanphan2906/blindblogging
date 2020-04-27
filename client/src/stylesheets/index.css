@@ -25,6 +25,12 @@ h1 {
     color: red;
 }
 
+.hide-from-users {
+    position: absolute;
+    left: -99em;
+    height: 0;
+}
+
 .hidden {
     display: none;
 }

@@ -47,6 +47,10 @@ function BlogDetailPage(props) {
                 };
             });
         });
+
+        return () => {
+            socket.disconnect();
+        };
     }, []);
 
     if (isLoading) return <Loader />;

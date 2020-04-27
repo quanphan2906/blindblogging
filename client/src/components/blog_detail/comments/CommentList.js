@@ -28,6 +28,7 @@ function CommentList({ likes, comments, postId, socket }) {
                 console.log(err);
             }
         );
+        setNewComment("");
     };
     return (
         <div className="comment-list-wrapper">

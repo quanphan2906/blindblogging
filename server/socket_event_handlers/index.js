@@ -11,17 +11,16 @@ module.exports = (io, socket) => {
                     content,
                 });
 
-                //populate the commentor field also
+                const populatedComment = await comment
+                    .populate("commentor", "-password")
+                    .execPopulate();
+
                 io.emit("newCommentData", {
-                    ...comment._doc,
+                    ...populatedComment._doc,
                 });
             } catch (err) {
                 callback(err);
             }
         }
     );
-
-    socket.on("disconnect", () => {
-        console.log("socket has closed");
-    });
 };

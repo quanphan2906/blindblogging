@@ -26,7 +26,10 @@
     border-color: black;
     border-radius: 4px;
     text-align: center;
-    padding: 4px;
+    padding: 24px 4px;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    min-height: 300px;
 }
 
 .blog-detail-page
@@ -41,7 +44,7 @@
 
 .blog-detail-page .author-info-wrapper .author-info-container .name {
     font-weight: 550;
-    margin-top: 2vh;
+    margin-top: 4vh;
     font-size: 1.25em;
 }
 

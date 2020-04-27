@@ -70,4 +70,5 @@ JWT token needs to be included in the Authorization field of request header as "
 FUTURE UPDATES:
 1. Change CommentModel so that other users can reply to comments
 2. OAuth
-3. Socket.io for comments
+3. Socket.io for comments: users can post comment/change/delete it
+4. Logout functionality

@@ -18,9 +18,24 @@ function Author({
                         alt={altText ? altText : "avatar"}
                     />
                 </div>
-                <div className="name"> {name} </div>
-                <div className="occupation"> {occupation} </div>
-                <p className="description"> {description}</p>
+                <label htmlFor="name" className="hide-from-users">
+                    Name
+                </label>
+                <span className="name" id="name">
+                    {name}
+                </span>
+                <label htmlFor="occupation" className="hide-from-users">
+                    Occupation
+                </label>
+                <span className="occupation" id="occupation">
+                    {occupation}
+                </span>
+                <label htmlFor="description" className="hide-from-users">
+                    Description
+                </label>
+                <p className="description" id="description">
+                    {description}
+                </p>
             </div>
         </aside>
     );
