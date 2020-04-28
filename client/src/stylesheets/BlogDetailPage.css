@@ -11,49 +11,8 @@
     margin: 5% 0%;
 }
 
-.blog-detail-page .author-info-wrapper,
 .blog-detail-page .blog-detail-wrapper {
     padding: 8px;
-}
-
-.blog-detail-page .author-info-wrapper {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-}
-
-.blog-detail-page .author-info-wrapper .author-info-container {
-    border-color: black;
-    border-radius: 4px;
-    text-align: center;
-    padding: 24px 4px;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    min-height: 300px;
-}
-
-.blog-detail-page
-    .author-info-wrapper
-    .author-info-container
-    .profile-img-container
-    img {
-    border-radius: 50%;
-    width: 10vh;
-    height: 10vh;
-}
-
-.blog-detail-page .author-info-wrapper .author-info-container .name {
-    font-weight: 550;
-    margin-top: 4vh;
-    font-size: 1.25em;
-}
-
-.blog-detail-page .author-info-wrapper .author-info-container .occupation {
-    margin-top: 1vh;
-}
-
-.blog-detail-page .author-info-wrapper .author-info-container .description {
-    font-size: 0.9em;
 }
 
 .blog-detail-page .blog-detail-wrapper .blog-detail-container .title {
@@ -95,13 +54,30 @@
     margin: 3em 0em 2em;
 }
 
-.blog-detail-page .blog-detail-wrapper .divider {
-    border-bottom: 1px solid black;
-}
-
 .blog-detail-page .blog-detail-wrapper .comment-list-wrapper .like-container {
     display: flex;
     justify-content: space-between;
+}
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .like-container
+    div {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .like-container
+    div
+    span {
+    margin-left: 4px;
+    font-weight: 550;
+    font-size: 1.15em;
 }
 
 .blog-detail-page
@@ -162,6 +138,7 @@
     .commentor-info
     .commentor {
     margin-left: 8px;
+    font-weight: 600;
 }
 
 .blog-detail-page

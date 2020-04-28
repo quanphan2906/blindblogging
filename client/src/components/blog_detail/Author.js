@@ -1,44 +1,49 @@
-import React from "react";
+import React, { Fragment } from "react";
 import endpoints from "../../api_config/endpoints";
+import { withRouter, Link } from "react-router-dom";
 
 function Author({
     author: { name, profileImageUrl, altText, occupation, description },
+    match,
 }) {
+    const infoObj = { name, occupation, description };
+    const isProfilePage = match.path.split("/")[1] === "profile";
     return (
         <aside className="author-info-wrapper">
             <h1>About the author</h1>
             <div className="author-info-container">
+                {isProfilePage === true ? (
+                    <div className="edit-link-container">
+                        <Link to="/profile/edit">Edit Profile</Link>
+                    </div>
+                ) : (
+                    false
+                )}
                 <div className="profile-img-container">
-                    <img
-                        src={
-                            profileImageUrl
-                                ? endpoints.GET_IMAGE(profileImageUrl)
-                                : ""
-                        }
-                        alt={altText ? altText : "avatar"}
-                    />
+                    {profileImageUrl ? (
+                        <img
+                            src={endpoints.GET_IMAGE(profileImageUrl)}
+                            alt={altText ? altText : "avatar"}
+                        />
+                    ) : (
+                        false
+                    )}
                 </div>
-                <label htmlFor="name" className="hide-from-users">
-                    Name
-                </label>
-                <span className="name" id="name">
-                    {name}
-                </span>
-                <label htmlFor="occupation" className="hide-from-users">
-                    Occupation
-                </label>
-                <span className="occupation" id="occupation">
-                    {occupation}
-                </span>
-                <label htmlFor="description" className="hide-from-users">
-                    Description
-                </label>
-                <p className="description" id="description">
-                    {description}
-                </p>
+                {Object.keys(infoObj).map((key) => {
+                    return (
+                        <Fragment key={key}>
+                            <label htmlFor={key} className="hide-from-users">
+                                {key}
+                            </label>
+                            <div className={key} id={key}>
+                                {infoObj[key]}
+                            </div>
+                        </Fragment>
+                    );
+                })}
             </div>
         </aside>
     );
 }
 
-export default Author;
+export default withRouter(Author);

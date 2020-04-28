@@ -1,4 +1,5 @@
 const CommentModel = require("../models/CommentModel");
+const PostModel = require("../models/PostModel");
 
 module.exports = (io, socket) => {
     socket.on(
@@ -23,4 +24,17 @@ module.exports = (io, socket) => {
             }
         }
     );
+    socket.on("like", async ({ postId }, callback) => {
+        try {
+            const post = await PostModel.findById(postId).exec();
+
+            post.likes = post.likes + 1;
+
+            await post.save();
+
+            io.emit("newLike");
+        } catch (err) {
+            callback(err);
+        }
+    });
 };

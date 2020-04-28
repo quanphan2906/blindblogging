@@ -1,23 +1,30 @@
 import React from "react";
 import endpoints from "../../../api_config/endpoints";
+import moment from "moment";
 
-function Comment({ comment, auth }) {
+function Comment({ comment }) {
     const { commentor, content } = comment;
     const { name, profileImageUrl, altText } = commentor;
+
+    const dateFormat = (originalDate) => {
+        const date = new Date(originalDate);
+        const UTCDate = date.toUTCString();
+        return moment(UTCDate).format("MMM Do YYYY");
+    };
 
     return (
         <div className="comment-container">
             <div className="side-info">
                 <div className="commentor-info">
                     <div className="avatar">
-                        <img
-                            src={
-                                profileImageUrl
-                                    ? endpoints.GET_IMAGE(profileImageUrl)
-                                    : ""
-                            }
-                            alt={altText ? altText : "avatar"}
-                        />
+                        {profileImageUrl ? (
+                            <img
+                                src={endpoints.GET_IMAGE(profileImageUrl)}
+                                alt={altText ? altText : "avatar"}
+                            />
+                        ) : (
+                            false
+                        )}
                     </div>
                     <label htmlFor="commentor" className="hide-from-users">
                         Name
@@ -30,7 +37,7 @@ function Comment({ comment, auth }) {
                     Date
                 </label>
                 <div className="date" id="date">
-                    Jan 28, 2019
+                    {dateFormat(comment.updatedAt)}
                 </div>
             </div>
             <label htmlFor="content" className="hide-from-users">

@@ -48,6 +48,15 @@ function BlogDetailPage(props) {
             });
         });
 
+        socket.on("newLike", () => {
+            setPost((post) => {
+                return {
+                    ...post,
+                    likes: post.likes + 1,
+                };
+            });
+        });
+
         return () => {
             socket.disconnect();
         };

@@ -139,6 +139,7 @@ router
             post.comments = await CommentModel.find({
                 post: post._id,
             })
+                .sort({ createdAt: -1 })
                 .populate("commentor", "name profileImageUrl altText updatedAt")
                 .exec(); //TODO: test this when writing comment routes
 

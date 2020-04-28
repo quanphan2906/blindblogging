@@ -72,3 +72,5 @@ FUTURE UPDATES:
 2. OAuth
 3. Socket.io for comments: users can post comment/change/delete it
 4. Logout functionality
+5. Attach a list of users who like a post to that post
+6. Create a draft state of a post, saved in db but not published

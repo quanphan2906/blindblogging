@@ -12,6 +12,7 @@ function CommentList({ likes, comments, postId, socket }) {
     const handleChange = (e) => {
         setNewComment(e.target.value);
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -30,11 +31,25 @@ function CommentList({ likes, comments, postId, socket }) {
         );
         setNewComment("");
     };
+
+    const handleLike = (e) => {
+        //in the future -> save a list of likers
+        //if the person has liked the post -> no more like
+        if (auth._id) {
+            socket.emit("like", { postId }, (err) => {
+                console.log(err);
+            });
+        }
+    };
+
     return (
         <div className="comment-list-wrapper">
             <div className="like-container">
-                <h1>Likes {likes} </h1>
-                <Button color="red" action="Like" />
+                <div>
+                    <h1>Likes</h1>
+                    <span> {likes} </span>
+                </div>
+                <Button color="red" action="Like" handleClick={handleLike} />
             </div>
             <div className="comment-list-container">
                 <h1>Comments</h1>

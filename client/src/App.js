@@ -35,8 +35,8 @@ function App() {
                     <Route exact path="/create" component={BlogEditPage} />
                     <Route path="edit/:id" component={BlogEditPage} />
                     <Route path="/blog/:id" component={BlogDetailPage} />
-                    <Route path="/profile/:id" component={Profile} />
                     <Route exact path="/profile/edit" component={EditProfile} />
+                    <Route path="/profile/:id" component={Profile} />
                 </Switch>
             </BrowserRouter>
         </AuthContextProvider>

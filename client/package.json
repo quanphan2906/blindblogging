@@ -9,6 +9,7 @@
         "@tinymce/tinymce-react": "^3.5.0",
         "axios": "^0.19.2",
         "jwt-decode": "^2.2.0",
+        "moment": "^2.24.0",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-html-parser": "^2.0.2",
