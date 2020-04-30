@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import Auth from "./components/auth/Auth";
@@ -33,7 +33,7 @@ function App() {
                     <Route exact path={["/", "/home"]} component={HomePage} />
                     <Route exact path="/blog" component={BlogList} />
                     <Route exact path="/create" component={BlogEditPage} />
-                    <Route path="edit/:id" component={BlogEditPage} />
+                    <Route path="/edit/:id" component={BlogEditPage} />
                     <Route path="/blog/:id" component={BlogDetailPage} />
                     <Route exact path="/profile/edit" component={EditProfile} />
                     <Route path="/profile/:id" component={Profile} />

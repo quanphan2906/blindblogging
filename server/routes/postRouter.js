@@ -2,7 +2,6 @@ const router = require("express").Router();
 
 const PostModel = require("../models/PostModel");
 const CommentModel = require("../models/CommentModel");
-const UserModel = require("../models/UserModel");
 
 const checkAuth = require("../helpers/checkAuth");
 const upload = require("../helpers/multerConfig");
@@ -14,69 +13,73 @@ const fs = require("fs");
 //return posts with queries
 router.get("/", async (req, res, next) => {
     try {
-        if (!req.query.pageName) throw new AppError("pageName needed", 400);
+        //objects to pass in mongo query
+        let queryObj = {};
+        let findScore = {};
+        let sortObj = {};
 
-        if (req.query.pageName === "home") {
-            const limit = req.query.limit ? parseInt(req.query.limit) : 3;
-            const topic = req.query.topic ? req.query.topic : "blogging"; //string
+        //extract req query
+        const pageNum = req.query.pageNum ? parseInt(req.query.pageNum) : 1;
+        const resPerPage = req.query.resPerPage
+            ? parseInt(req.query.resPerPage)
+            : 3;
 
-            const posts = await PostModel.find({ topic })
-                .sort({ createdAt: -1 })
-                .limit(limit)
-                .exec();
+        const {
+            searchString,
+            isMostRecent = true,
+            topic,
+            userId,
+            isCommentLength = false,
+        } = req.query;
 
-            return res.json({ posts });
-        }
-
-        if (req.query.pageName === "blog") {
-            const pageNum = req.query.pageNum ? parseInt(req.query.pageNum) : 1;
-            const resPerPage = req.query.resPerPage
-                ? parseInt(req.query.resPerPage)
-                : 3;
-            const { isMostRecent = true, topic, searchString } = req.query;
-            //at front-end, allow users to search by title or author
-
-            //at front-end, allow users to search across topics (disable topic)
-            const queryObj = {};
-            const findScore = {};
-            const sortObj = {};
-            //if searchString -> sort according to relevance
-            //else, search according to mostRecent or mostLike
-
-            if (topic) queryObj.topic = topic;
-            if (searchString) {
-                queryObj.$text = {
-                    $search: searchString,
-                };
-                findScore.score = { $meta: "textScore" };
-                sortObj.score = { $meta: "textScore" };
+        if (topic) queryObj.topic = req.query.topic;
+        if (userId) queryObj.author = userId;
+        if (searchString) {
+            queryObj.$text = {
+                $search: searchString,
+            };
+            findScore = { score: { $meta: "textScore" } };
+            sortObj = { score: { $meta: "textScore" } };
+        } else {
+            if (isMostRecent === true) {
+                //the most recent
+                sortObj = { createdAt: -1 };
             } else {
-                if (isMostRecent === true) {
-                    sortObj = { createdAt: -1 };
-                } else {
-                    //take the most likes post
-                    sortObj = { likes: -1 };
-                }
+                //take the most likes post
+                sortObj = { likes: -1 };
             }
-
-            const total = await PostModel.countDocuments(queryObj);
-            const totalPage =
-                total % resPerPage === 0
-                    ? total / resPerPage
-                    : Math.floor(total / resPerPage) + 1;
-
-            if (pageNum > totalPage) {
-                return res.json({ posts: [], totalPage, message: "notFound" });
-            }
-
-            const posts = await PostModel.find(queryObj, findScore)
-                .skip((pageNum - 1) * resPerPage)
-                .sort(sortObj)
-                .limit(resPerPage)
-                .exec();
-
-            res.json({ posts, totalPage });
         }
+
+        //paginate
+        const total = await PostModel.countDocuments(queryObj);
+        const totalPage =
+            total % resPerPage === 0
+                ? total / resPerPage
+                : Math.floor(total / resPerPage) + 1;
+
+        if (pageNum > totalPage) {
+            return res.json({ posts: [], totalPage, message: "notFound" });
+        }
+
+        let posts = await PostModel.find(queryObj, findScore)
+            .skip((pageNum - 1) * resPerPage)
+            .sort(sortObj)
+            .limit(resPerPage)
+            .exec();
+
+        if (isCommentLength) {
+            posts = await Promise.all(
+                posts.map(async (post) => {
+                    const commentLength = await CommentModel.countDocuments({
+                        post: post._id,
+                    });
+                    post._doc.commentLength = commentLength;
+                    return post;
+                })
+            );
+        }
+
+        return res.json({ posts, totalPage });
     } catch (err) {
         next(err);
     }

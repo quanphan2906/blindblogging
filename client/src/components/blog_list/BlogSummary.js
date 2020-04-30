@@ -1,36 +1,42 @@
 import React from "react";
 import placeholder from "../../assets/ipad_and_plant.jpg";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
-function BlogSummary() {
-    const stats = { likes: 56, comments: 10 };
+function BlogSummary({ post }) {
+    const stats = { likes: post.likes, comments: post.commentLength };
+
+    const dateFormat = (originalDate) => {
+        const date = new Date(originalDate);
+        const UTCDate = date.toUTCString();
+        return moment(UTCDate).format("MMMM Do YYYY");
+    };
+
     return (
         <div className="blog-summary-wrapper">
             <div className="cover-image">
                 <img src={placeholder} alt="beatiful placeholder" />
             </div>
             <div className="content">
+                <div className="date-container">
+                    <div> {dateFormat(post.updatedAt)} </div>
+                </div>
                 <div>
-                    <h2>How can you blog when you are visually impaired?</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Ut magnam iure officia, repellat reiciendis explicabo,
-                        sit suscipit dignissimos quas voluptatibus, tenetur
-                        consectetur exercitationem obcaecati totam in ducimus
-                        ipsam. Labore, eius!
-                    </p>
+                    <h2>{post.title}</h2>
+                    <p>{post.content}</p>
                     <div className="divider"></div>
                 </div>
                 <div className="action-container">
                     {Object.keys(stats).map((key) => {
                         return (
-                            <span>
+                            <span key={key}>
                                 <span> {key} </span>
                                 <span> {stats[key]} </span>
                             </span>
                         );
                     })}
-                    <Link to="/edit/asdf">Edit post</Link>
+                    <Link to={"/blog/" + post._id}>See post</Link>
+                    <Link to={"/edit/" + post._id}>Edit post</Link>
                 </div>
             </div>
         </div>

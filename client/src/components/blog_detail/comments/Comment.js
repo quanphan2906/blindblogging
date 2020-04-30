@@ -9,7 +9,7 @@ function Comment({ comment }) {
     const dateFormat = (originalDate) => {
         const date = new Date(originalDate);
         const UTCDate = date.toUTCString();
-        return moment(UTCDate).format("MMM Do YYYY");
+        return moment(UTCDate).format("MMMM Do YYYY");
     };
 
     return (

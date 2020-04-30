@@ -8,6 +8,7 @@
 @import "./Profile.css";
 @import "./BlogList.css";
 @import "./Author.css";
+@import "./EditProfile.css";
 
 body {
     margin: 0;

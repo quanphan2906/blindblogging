@@ -14,18 +14,35 @@
     margin-top: 3vh;
 }
 
+.blog-list-container .blog-summary-wrapper .cover-image {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .blog-list-container .blog-summary-wrapper .cover-image img {
     width: 100%;
 }
 
 .blog-list-container .blog-summary-wrapper .content {
     padding: 0px 12px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.blog-list-container .blog-summary-wrapper .date-container {
+    width: 100%;
+    text-align: end;
 }
 
 .blog-list-container .blog-summary-wrapper .action-container {
     display: flex;
     justify-content: space-around;
     margin-top: 8px;
+    width: 100%;
 }
 
 .blog-list-wrapper .page-nav-wrapper {

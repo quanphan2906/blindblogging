@@ -4,14 +4,14 @@ const CommentModel = require("../models/CommentModel");
 
 //getting comments with id of a post
 router.get("/", async (req, res, next) => {
-  const { postId: post } = req.query;
+    const { postId: post } = req.query;
 
-  const comments = await CommentModel.find({ post })
-    .populate("commentor", "_id name profileImageUrl")
-    .sort({ createdAt: -1 })
-    .exec();
+    const comments = await CommentModel.find({ post })
+        .populate("commentor", "_id name profileImageUrl")
+        .sort({ createdAt: -1 })
+        .exec();
 
-  res.json({ comments });
+    res.json({ comments });
 });
 
 //-----USE SOCKET.IO FOR THE BELOW--------//
@@ -20,15 +20,15 @@ router.get("/", async (req, res, next) => {
 //TEST ONLY
 //TODO: DELETE WHEN SOCKET.IO IS OUT
 router.post("/create", async (req, res, next) => {
-  const { post, commentor, content } = req.body;
+    const { post, commentor, content } = req.body;
 
-  const comment = await CommentModel.create({
-    post,
-    commentor,
-    content,
-  });
+    const comment = await CommentModel.create({
+        post,
+        commentor,
+        content,
+    });
 
-  res.json({ comment });
+    res.json({ comment });
 });
 
 router.put("/:id");
