@@ -1,6 +1,6 @@
 .profile-edit-wrapper {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,9 +9,35 @@
 .profile-edit-container {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 4px;
+    width: 60%;
+    height: 50%;
+    padding: 3vw;
+    box-sizing: border-box;
 }
 
-.profile-edit-container .profile-image-container div img {
-    width: 300px;
-    border: 50%;
+.profile-edit-container .profile-image-wrapper .profile-image-container {
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+}
+
+.profile-edit-container .profile-image-wrapper .profile-image-container img {
+    height: 8vw;
+    width: 8vw;
+    border-radius: 50%;
+}
+
+.profile-edit-container .grid-col {
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+.profile-edit-container .grid-col p,
+.profile-edit-container .grid-col div {
+    text-align: center;
+}
+
+.profile-edit-container .button-container {
+    width: 100%;
+    text-align: end;
+    margin-top: 3vh;
 }

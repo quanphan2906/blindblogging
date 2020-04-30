@@ -1,12 +1,12 @@
 import React from "react";
 import Button from "../common/Button";
+import capitalize from "../../helpers/capitalize";
 
 function EmailAndPass({
     authState,
     handleChange,
     handleSubmit,
     error,
-    capitalize,
     formMessage,
 }) {
     return (

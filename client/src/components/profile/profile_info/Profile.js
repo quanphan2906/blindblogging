@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import Author from "../blog_detail/Author";
-import BlogList from "../blog_list/BlogList";
-import Loader from "../common/Loader";
-import errorHandler from "../../api_config/errorHandler";
+import Author from "../../blog_detail/Author";
+import BlogList from "../../blog_list/BlogList";
+import Loader from "../../common/Loader";
+import errorHandler from "../../../api_config/errorHandler";
 import Axios from "axios";
-import endpoints from "../../api_config/endpoints";
+import endpoints from "../../../api_config/endpoints";
 import ReactDOM from "react-dom";
 import Search from "./Search";
 

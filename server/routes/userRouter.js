@@ -116,7 +116,8 @@ router.put(
                     email: req.body.email,
                 }).exec();
 
-                if (existedEmail) return res.json({ message: "existedEmail" });
+                if (existedEmail)
+                    return res.json({ message: "existedEmail", user: null });
             }
 
             if (req.body.password) {
@@ -148,7 +149,7 @@ router.put(
                 .select("-password")
                 .exec();
 
-            res.json({ user: newUserInfo._doc });
+            res.json({ user: newUserInfo._doc, message: "success" });
         } catch (err) {
             next(err);
         }

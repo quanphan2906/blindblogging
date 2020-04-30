@@ -1,16 +1,10 @@
 import React from "react";
 import endpoints from "../../../api_config/endpoints";
-import moment from "moment";
+import dateFormat from "../../../helpers/dateFormat";
 
 function Comment({ comment }) {
     const { commentor, content } = comment;
     const { name, profileImageUrl, altText } = commentor;
-
-    const dateFormat = (originalDate) => {
-        const date = new Date(originalDate);
-        const UTCDate = date.toUTCString();
-        return moment(UTCDate).format("MMMM Do YYYY");
-    };
 
     return (
         <div className="comment-container">

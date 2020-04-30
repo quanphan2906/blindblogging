@@ -19,12 +19,14 @@ function BlogEditPage() {
         content: "",
     });
     const [previewImgUrl, setPreviewImgUrl] = useState(placeholder);
+
     const handleChange = (e) => {
         setPostInfo({
             ...postInfo,
             [e.target.id]: e.target.value,
         });
     };
+
     const handleFileSelected = (e) => {
         setPostInfo({
             ...postInfo,
@@ -33,12 +35,14 @@ function BlogEditPage() {
         const imageUrl = URL.createObjectURL(e.target.files[0]);
         setPreviewImgUrl(imageUrl);
     };
+
     const handleEditorChange = (newContent, editor) => {
         setPostInfo({
             ...postInfo,
             content: newContent,
         });
     };
+
     const handleSubmit = async (e) => {
         const postFormData = new FormData();
 
@@ -71,6 +75,7 @@ function BlogEditPage() {
             errorHandler(err);
         }
     };
+
     return (
         <main className="blog-editor-page">
             <Title title="title" handleChange={handleChange} />

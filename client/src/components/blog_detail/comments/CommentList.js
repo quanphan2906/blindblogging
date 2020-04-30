@@ -5,7 +5,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import NewComment from "./NewComment";
 
 function CommentList({ likes, comments, postId, socket }) {
-    const auth = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
 
     const [newComment, setNewComment] = useState("");
 

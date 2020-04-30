@@ -6,8 +6,8 @@ import HomePage from "./components/blog_list/HomePage";
 import BlogList from "./components/blog_list/BlogList";
 import BlogEditPage from "./components/blog_edit/BlogEditPage";
 import BlogDetailPage from "./components/blog_detail/BlogDetailPage";
-import Profile from "./components/profile/Profile";
-import EditProfile from "./components/profile/EditProfile";
+import Profile from "./components/profile/profile_info/Profile";
+import EditProfile from "./components/profile/edit_profile/EditProfile";
 import AuthContextProvider from "./contexts/AuthContext";
 
 function App() {

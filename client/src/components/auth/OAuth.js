@@ -1,7 +1,8 @@
 import React from "react";
 import Button from "../common/Button";
+import capitalize from "../../helpers/capitalize";
 
-function OAuth({ capitalize, authState }) {
+function OAuth({ authState }) {
     return (
         <div className="oauth-button-container">
             <Button

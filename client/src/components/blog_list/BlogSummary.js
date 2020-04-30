@@ -1,16 +1,10 @@
 import React from "react";
 import placeholder from "../../assets/ipad_and_plant.jpg";
 import { Link } from "react-router-dom";
-import moment from "moment";
+import dateFormat from "../../helpers/dateFormat";
 
 function BlogSummary({ post }) {
     const stats = { likes: post.likes, comments: post.commentLength };
-
-    const dateFormat = (originalDate) => {
-        const date = new Date(originalDate);
-        const UTCDate = date.toUTCString();
-        return moment(UTCDate).format("MMMM Do YYYY");
-    };
 
     return (
         <div className="blog-summary-wrapper">

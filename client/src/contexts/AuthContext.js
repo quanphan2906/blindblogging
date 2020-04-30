@@ -2,42 +2,66 @@ import React, { createContext, useState, useEffect } from "react";
 import Axios from "axios";
 import endpoints from "../api_config/endpoints";
 import jwtDecode from "jwt-decode";
+import validateJwt from "../helpers/validateJwt";
 
 export const AuthContext = createContext();
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({});
+    const [token, setToken] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const getJWTToken = () => {
+        const { token } = validateJwt();
+        setToken(token);
+    };
 
     useEffect(() => {
-        const tokenStr = localStorage.getItem("JWT token");
-        if (!tokenStr) return;
-        const tokenObj = JSON.parse(tokenStr);
-
-        const now = new Date();
-        const currentTime = now.getTime();
-
-        if (currentTime >= tokenObj.expiry) {
-            localStorage.removeItem("JWT token");
-        } else {
-            try {
-                const { userId } = jwtDecode(tokenObj.token);
-                const fetchData = async (token) => {
-                    const res = await Axios.get(
-                        endpoints.GET_PROFILE_ID(userId)
-                    );
-                    const {
-                        data: { user },
-                    } = res;
-                    setAuth(user);
-                };
-                fetchData(userId);
-            } catch (err) {
-                console.log("Error has occured", err);
-            }
-        }
+        getJWTToken();
+        window.addEventListener("storage", getJWTToken);
+        return () => {
+            window.removeEventListener("storage", getJWTToken);
+        };
     }, []);
+
+    useEffect(() => {
+        if (!token) {
+            setAuth(null);
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const { userId } = jwtDecode(token);
+
+            const fetchData = async (id) => {
+                const res = await Axios.get(endpoints.GET_PROFILE_ID(id));
+
+                const {
+                    data: { user },
+                } = res;
+
+                setAuth(user);
+                setIsLoading(false);
+            };
+
+            fetchData(userId);
+        } catch (err) {
+            console.log("Error has occured", err);
+            setIsLoading(false);
+            setError(err);
+        }
+    }, [token]);
+
+    const handleAuthChange = (newAuth) => {
+        setAuth(newAuth);
+    };
+
     return (
-        <AuthContext.Provider value={{ ...auth }}>
+        <AuthContext.Provider
+            value={{ auth, isLoading, handleAuthChange, token }}
+        >
             {props.children}
         </AuthContext.Provider>
     );

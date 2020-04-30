@@ -22,10 +22,6 @@ function Auth(props) {
 
     const [formMessage, setFormMessage] = useState("");
 
-    const capitalize = (word) => {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    };
-
     const handleChange = (e) => {
         setError({ email: "", password: "" });
         setFormMessage("");
@@ -126,14 +122,13 @@ function Auth(props) {
         <main className="auth-wrapper">
             <div className="auth-container">
                 <Intro />
-                <OAuth capitalize={capitalize} authState={authState} />
+                <OAuth authState={authState} />
 
                 <EmailAndPass
                     authState={authState}
                     handleChange={handleChange}
                     handleSubmit={handleSubmit}
                     error={error}
-                    capitalize={capitalize}
                     formMessage={formMessage}
                 />
             </div>
