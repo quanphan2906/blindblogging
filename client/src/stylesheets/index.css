@@ -47,3 +47,7 @@ h2 {
 .divider {
     border-bottom: 1px solid black;
 }
+
+.text-align-center {
+    text-align: center;
+}

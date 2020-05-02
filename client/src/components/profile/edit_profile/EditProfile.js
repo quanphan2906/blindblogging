@@ -14,7 +14,7 @@ function EditProfile({ history }) {
     );
     const [userInfo, setUserInfo] = useState({});
     const [imagePreview, setImagePreview] = useState("");
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState({ content: "", color: "" });
 
     const infoList = {
         name: userInfo.name,
@@ -25,7 +25,7 @@ function EditProfile({ history }) {
     useEffect(() => {
         if (isLoading === false) {
             if (!auth) {
-                return history.push("/login"); //extract this to a useCallback hook
+                return history.push("/login");
             }
             setUserInfo((userInfo) => {
                 return {
@@ -47,6 +47,7 @@ function EditProfile({ history }) {
 
         const imageUrl = URL.createObjectURL(e.target.files[0]);
         setImagePreview(imageUrl);
+        setMessage({ ...message, content: "", color: "" });
     };
 
     const handleInfoChange = (e) => {
@@ -54,6 +55,7 @@ function EditProfile({ history }) {
             ...userInfo,
             [e.target.id]: e.target.value,
         });
+        setMessage({ ...message, content: "", color: "" });
     };
 
     const handleSubmit = async (e) => {
@@ -77,23 +79,35 @@ function EditProfile({ history }) {
             } = res;
 
             if (message === "existedEmail") {
-                return setError(
-                    "This email has already existed. Please use another one or login"
-                );
+                return setMessage({
+                    ...message,
+                    content:
+                        "This email has been used. Please choose another one",
+                    color: "red",
+                });
             }
             if (message === "success") {
+                setMessage({
+                    ...message,
+                    content: "Profile changed success",
+                    color: "green",
+                });
                 return handleAuthChange(user);
             }
         } catch (err) {
             errorHandler(err);
-            setError(err);
+            setMessage({
+                ...message,
+                content: "Error occurred. Please reload and try again",
+                color: "red",
+            });
         }
     };
 
     if (isLoading) return <Loader />;
 
     return (
-        <div className="profile-edit-wrapper">
+        <main className="profile-edit-wrapper">
             <form className="profile-edit-container">
                 <Image
                     profileImageUrl={imagePreview}
@@ -116,8 +130,16 @@ function EditProfile({ history }) {
                         handleClick={handleSubmit}
                     />
                 </div>
+
+                <div
+                    role="alert"
+                    style={{ color: message.color }}
+                    className="text-align-center"
+                >
+                    {message.content}
+                </div>
             </form>
-        </div>
+        </main>
     );
 }
 

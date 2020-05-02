@@ -5,8 +5,8 @@ function UserInfo({ title, infoList, handleInfoChange }) {
     return (
         <div className={`${title}-container grid-col`}>
             <h1> {capitalize(title)} </h1>
-            <input
-                type="text"
+            <textarea
+                aria-label={`${title}-textarea`}
                 id={title}
                 value={infoList[title] || ""}
                 onChange={handleInfoChange}

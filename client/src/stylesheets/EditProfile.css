@@ -12,7 +12,7 @@
     width: 60%;
     height: 50%;
     padding: 3vw;
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .profile-edit-container .profile-image-wrapper .profile-image-container {
@@ -34,6 +34,18 @@
 .profile-edit-container .grid-col p,
 .profile-edit-container .grid-col div {
     text-align: center;
+}
+
+.profile-edit-container .grid-col textarea {
+    margin: 4px 0px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    resize: none;
+}
+
+.profile-edit-container .description-container {
+    height: 10vh;
 }
 
 .profile-edit-container .button-container {
