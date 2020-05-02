@@ -125,8 +125,8 @@ router
                 res.locals.post = post._doc;
                 if (req.method === "GET") return next();
 
-                const { userId, email } = res.locals.userData;
-                if (post.author == userId) return next();
+                const { userId } = res.locals.userData;
+                if (post.author._id == userId) return next();
 
                 throw new AppError("notAuthorized", 403);
             } catch (err) {

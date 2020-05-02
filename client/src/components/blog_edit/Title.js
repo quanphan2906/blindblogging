@@ -1,6 +1,6 @@
 import React from "react";
 
-function Title({ title, handleChange }) {
+function Title({ title, handleChange, content }) {
     return (
         <div className={`${title.toLowerCase()}-wrapper`}>
             <h1 id="title-heading">
@@ -8,6 +8,7 @@ function Title({ title, handleChange }) {
             </h1>
             <textarea
                 aria-label={title}
+                value={content}
                 id={title}
                 className={`${title}-textarea`}
                 onChange={handleChange}

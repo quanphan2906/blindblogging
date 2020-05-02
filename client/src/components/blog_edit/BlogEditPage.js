@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import BlogEditor from "./BlogEditor";
 import placeholder from "../../assets/blogging.jpg";
 import Button from "../common/Button";
@@ -8,8 +8,11 @@ import Topic from "./Topic";
 import Axios from "axios";
 import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
+import { AuthContext } from "../../contexts/AuthContext";
+import Loader from "../common/Loader";
 
-function BlogEditPage() {
+function BlogEditPage({ history, match }) {
+    const { auth, isLoading: isAuthLoading, token } = useContext(AuthContext);
     const [postInfo, setPostInfo] = useState({
         title: "",
         subtitle: "",
@@ -19,6 +22,38 @@ function BlogEditPage() {
         content: "",
     });
     const [previewImgUrl, setPreviewImgUrl] = useState(placeholder);
+    const [isPageLoading, setIsPageLoading] = useState(true);
+
+    useEffect(() => {
+        if (match.params.id && isAuthLoading === false) {
+            try {
+                const fetchData = async (postId) => {
+                    const res = await Axios.get(endpoints.GET_POST_ID(postId));
+                    const {
+                        data: { post },
+                    } = res;
+
+                    if (post.author._id !== auth._id) {
+                        history.push(`/blog/${postId}`);
+                    } else {
+                        setPostInfo(post);
+                        setPreviewImgUrl(
+                            endpoints.GET_IMAGE(post.postImageUrl)
+                        );
+                        setIsPageLoading(false);
+                    }
+                };
+
+                fetchData(match.params.id);
+            } catch (err) {
+                errorHandler(err);
+            }
+        }
+
+        if (!match.params.id) {
+            setIsPageLoading(false);
+        }
+    }, [match, isAuthLoading, auth, history]);
 
     const handleChange = (e) => {
         setPostInfo({
@@ -46,28 +81,39 @@ function BlogEditPage() {
     const handleSubmit = async (e) => {
         const postFormData = new FormData();
 
-        for (let key of Object.keys(postInfo)) {
-            console.log(typeof key);
-            console.log(postInfo[key]);
+        const keys = [
+            "title",
+            "subtitle",
+            "postImage",
+            "content",
+            "topic",
+            "altText",
+        ];
+        for (let key of keys) {
             postFormData.append(key, postInfo[key]);
         }
-        for (var pair of postFormData.entries()) {
-            console.log(pair[0] + ", " + pair[1]);
-        }
-
-        const token = localStorage.getItem("JWT token");
+        // for (var pair of postFormData.entries()) {
+        //     console.log(pair[0] + ", " + pair[1]);
+        // }
 
         try {
-            const res = await Axios.post(
-                endpoints.CREATE_POST(),
-                postFormData,
-                {
+            let res;
+            if (!match.params.id) {
+                res = await Axios.post(endpoints.CREATE_POST(), postFormData, {
                     headers: { Authorization: `Bearer ${token}` },
-                }
-            );
+                });
+            } else {
+                res = await Axios.put(
+                    endpoints.PUT_POST_ID(match.params.id),
+                    postFormData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+            }
+
             const {
                 data: { message, post },
             } = res;
+
             if (message === "success") {
                 console.log(message);
             }
@@ -76,15 +122,26 @@ function BlogEditPage() {
         }
     };
 
+    if (isPageLoading) return <Loader />;
+
     return (
         <main className="blog-editor-page">
-            <Title title="title" handleChange={handleChange} />
-            <Title title="subtitle" handleChange={handleChange} />
-            <Topic handleChange={handleChange} />
+            <Title
+                title="title"
+                handleChange={handleChange}
+                content={postInfo.title}
+            />
+            <Title
+                title="subtitle"
+                handleChange={handleChange}
+                content={postInfo.subtitle}
+            />
+            <Topic handleChange={handleChange} topic={postInfo.topic} />
             <ImageUpload
                 previewImgUrl={previewImgUrl}
                 handleFileSelected={handleFileSelected}
                 handleChange={handleChange}
+                altText={postInfo.altText}
             />
             <BlogEditor
                 handleEditorChange={handleEditorChange}

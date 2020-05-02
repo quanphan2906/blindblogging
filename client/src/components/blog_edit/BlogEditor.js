@@ -7,7 +7,8 @@ function BlogEditor({ handleEditorChange, content }) {
             <Editor
                 apiKey="ggbytbuql282pp1ll5ctzytdqxnewwkvvu7skgjcknxvtu7z"
                 init={{
-                    height: 500,
+                    height: 1000,
+                    resize: false,
                     plugins: [
                         "advlist autolink lists link image charmap print preview anchor",
                         "searchreplace visualblocks code fullscreen",
@@ -39,6 +40,7 @@ function BlogEditor({ handleEditorChange, content }) {
                     paste_data_images: true,
                 }}
                 onEditorChange={handleEditorChange}
+                value={content}
             />
             <input
                 name="image"

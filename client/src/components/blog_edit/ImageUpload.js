@@ -1,6 +1,11 @@
 import React from "react";
 
-function ImageUpload({ previewImgUrl, handleFileSelected, handleChange }) {
+function ImageUpload({
+    previewImgUrl,
+    handleFileSelected,
+    handleChange,
+    altText,
+}) {
     return (
         <div className="upload-wrapper">
             <h1>Upload cover image</h1>
@@ -17,6 +22,7 @@ function ImageUpload({ previewImgUrl, handleFileSelected, handleChange }) {
                         id="altText"
                         type="text"
                         placeholder="Add alt text for the picture here"
+                        value={altText}
                         onChange={handleChange}
                     />
                 </div>
