@@ -64,6 +64,7 @@ router.get("/", async (req, res, next) => {
         let posts = await PostModel.find(queryObj, findScore)
             .skip((pageNum - 1) * resPerPage)
             .sort(sortObj)
+            .populate("author")
             .limit(resPerPage)
             .exec();
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import Axios from "axios";
 import endpoints from "../../api_config/endpoints";
@@ -6,9 +6,14 @@ import errorHandler from "../../api_config/errorHandler";
 import EmailAndPass from "./EmailAndPass";
 import OAuth from "./OAuth";
 import Intro from "./Intro";
+import { AuthContext } from "../../contexts/AuthContext";
+import jwtDecode from "jwt-decode";
+import jwtToStorage from "../../helpers/jwtToStorage";
 
 function Auth(props) {
     const authState = props.authState;
+
+    const { handleAuthChange, auth: authContext } = useContext(AuthContext);
 
     const [auth, setAuth] = useState({
         email: "",
@@ -21,6 +26,12 @@ function Auth(props) {
     });
 
     const [formMessage, setFormMessage] = useState("");
+
+    useEffect(() => {
+        if (authContext) {
+            props.history.push("/blogs");
+        }
+    }, [authContext]);
 
     const handleChange = (e) => {
         setError({ email: "", password: "" });
@@ -46,12 +57,19 @@ function Auth(props) {
         if (auth.email && auth.password && auth.password.length >= 6) {
             const authObj = { email: auth.email, password: auth.password };
 
-            const jwtToStorage = (token, expiresIn) => {
-                const now = new Date();
-                const expiry = now.getTime() + expiresIn;
-                const tokenObj = { token, expiry };
+            const handleSuccessAuth = async (token, expiresIn) => {
+                jwtToStorage(token, expiresIn);
 
-                localStorage.setItem("JWT token", JSON.stringify(tokenObj));
+                const { userId } = jwtDecode(token);
+
+                const res = await Axios.get(endpoints.GET_PROFILE_ID(userId));
+
+                const {
+                    data: { user },
+                } = res;
+
+                handleAuthChange(user);
+                return;
             };
 
             if (authState === "signup") {
@@ -65,9 +83,7 @@ function Auth(props) {
                     } = res;
 
                     if (message === "success") {
-                        jwtToStorage(token, expiresIn);
-                        props.history.push("/");
-                        return;
+                        handleSuccessAuth(token, expiresIn);
                     }
 
                     if (message === "existedEmail") {
@@ -94,9 +110,7 @@ function Auth(props) {
                     } = res;
 
                     if (message === "success") {
-                        jwtToStorage(token, expiresIn);
-                        props.history.push("/");
-                        return;
+                        handleSuccessAuth(token, expiresIn);
                     }
 
                     if (message === "notRegistered") {
@@ -118,6 +132,7 @@ function Auth(props) {
             setError(errorTemp);
         }
     };
+
     return (
         <main className="auth-wrapper">
             <div className="auth-container">

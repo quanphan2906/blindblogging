@@ -1,5 +1,4 @@
 import React from "react";
-import endpoints from "../../../api_config/endpoints";
 
 function Image({ profileImageUrl, handleImageUpload }) {
     return (

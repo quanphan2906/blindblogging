@@ -1,20 +1,39 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import endpoints from "../../api_config/endpoints";
 import { withRouter, Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Author({
-    author: { name, profileImageUrl, altText, occupation, description },
+    author: { name, profileImageUrl, altText, occupation, description, _id },
     match,
 }) {
+    const { auth } = useContext(AuthContext);
     const infoObj = { name, occupation, description };
     const isProfilePage = match.path.split("/")[1] === "profile";
+
+    let isOwner = true;
+    if (!auth) {
+        isOwner = false;
+    } else {
+        if (auth._id !== _id) isOwner = false;
+    }
+
     return (
         <aside className="author-info-wrapper">
             <h1>About the author</h1>
+
             <div className="author-info-container">
-                {isProfilePage === true ? (
+                {isProfilePage === true && isOwner === true ? (
                     <div className="edit-link-container">
                         <Link to="/profile/edit">Edit Profile</Link>
+                    </div>
+                ) : (
+                    false
+                )}
+
+                {isProfilePage === false ? (
+                    <div className="view-profile-container">
+                        <Link to={`/profile/${_id}`}>View profile</Link>
                     </div>
                 ) : (
                     false
@@ -29,6 +48,7 @@ function Author({
                         false
                     )}
                 </div>
+
                 {Object.keys(infoObj).map((key) => {
                     return (
                         <Fragment key={key}>

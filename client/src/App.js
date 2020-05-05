@@ -3,12 +3,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import Auth from "./components/auth/Auth";
 import HomePage from "./components/blog_list/HomePage";
-import BlogList from "./components/blog_list/BlogList";
 import BlogEditPage from "./components/blog_edit/BlogEditPage";
 import BlogDetailPage from "./components/blog_detail/BlogDetailPage";
 import Profile from "./components/profile/profile_info/Profile";
 import EditProfile from "./components/profile/edit_profile/EditProfile";
 import AuthContextProvider from "./contexts/AuthContext";
+import BlogsPage from "./components/blog_list/BlogsPage";
 
 function App() {
     return (
@@ -31,7 +31,7 @@ function App() {
                         )}
                     />
                     <Route exact path={["/", "/home"]} component={HomePage} />
-                    <Route exact path="/blog" component={BlogList} />
+                    <Route exact path="/blogs" component={BlogsPage} />
                     <Route exact path="/create" component={BlogEditPage} />
                     <Route path="/edit/:id" component={BlogEditPage} />
                     <Route path="/blog/:id" component={BlogDetailPage} />

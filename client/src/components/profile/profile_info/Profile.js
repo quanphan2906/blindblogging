@@ -1,20 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Author from "../../blog_detail/Author";
 import BlogList from "../../blog_list/BlogList";
 import Loader from "../../common/Loader";
 import errorHandler from "../../../api_config/errorHandler";
 import Axios from "axios";
 import endpoints from "../../../api_config/endpoints";
-import ReactDOM from "react-dom";
-import Search from "./Search";
+import Search from "../../common/Search";
 
-function Profile({ match, location, history }) {
+function Profile({ match }) {
     const [author, setAuthor] = useState({});
-    const [postList, setPostList] = useState({});
-    const [totalPage, setTotalPage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-
-    const searchInput = useRef();
 
     useEffect(() => {
         const fetchAuthor = async (id) => {
@@ -25,71 +20,15 @@ function Profile({ match, location, history }) {
                     data: { user },
                 } = res;
 
-                return user;
-            } catch (err) {
-                errorHandler(err);
-            }
-        };
-
-        const fetchPostList = async (
-            id,
-            pageNum = 1,
-            isCommentLength = true,
-            searchString = null
-        ) => {
-            try {
-                const res = await Axios.get(endpoints.GET_POSTS(id), {
-                    params: {
-                        userId: id,
-                        pageNum,
-                        isCommentLength,
-                        searchString,
-                    },
-                });
-
-                const {
-                    data: { posts, totalPage },
-                } = res;
-
-                return { posts, totalPage };
-            } catch (err) {
-                errorHandler(err);
-            }
-        };
-
-        const id = match.params.id;
-        const query = new URLSearchParams(location.search);
-
-        Promise.all([
-            fetchAuthor(id),
-            fetchPostList(id, query.get("pageNum"), true, query.get("search")),
-        ]).then(([user, { posts, totalPage }]) => {
-            ReactDOM.unstable_batchedUpdates(() => {
                 setAuthor(user);
-                setPostList(posts);
-                setTotalPage(parseInt(totalPage));
                 setIsLoading(false);
-            });
-        });
-    }, [match.params.id, match.params.pageNum, location.search]);
+            } catch (err) {
+                errorHandler(err);
+            }
+        };
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
-
-        const searchValue = searchInput.current.value;
-        const query = new URLSearchParams(location.search);
-
-        if (searchValue === "") {
-            if (query.has("search")) query.delete("search");
-        } else {
-            query.set("search", searchValue);
-        }
-
-        history.push({
-            pathname: location.pathname,
-            search: query.toString(),
-        });
-    };
+        fetchAuthor(match.params.id);
+    }, [match.params.id]);
 
     if (isLoading) return <Loader />;
 
@@ -98,9 +37,9 @@ function Profile({ match, location, history }) {
             <Author author={author} />
             <main className="profile-page-container">
                 <h1>Your past posts</h1>
-                <Search handleSearch={handleSearch} searchInput={searchInput} />
+                <Search />
                 {/* add select form here when add draft functionality */}
-                <BlogList postList={postList} totalPage={totalPage} />
+                <BlogList role="author" />
             </main>
         </div>
     );
