@@ -101,6 +101,7 @@ router.post(
                 ...req.body,
                 author,
                 postImageUrl,
+                likes: 0,
             });
 
             res.json({ message: "success", post: newPost._doc });

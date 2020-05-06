@@ -57,7 +57,7 @@ JWT token needs to be included in the Authorization field of request header as "
 
 -----COMMENTS------
 1. /api/comments/ (GET):
-    QUERY: postId
+    QUERY: postId OR commentId (of original comment)
     RETURN DATA: comments
 
 -----IMAGE--------
@@ -70,7 +70,6 @@ JWT token needs to be included in the Authorization field of request header as "
 FUTURE UPDATES:
 1. Change CommentModel so that other users can reply to comments
 2. OAuth
-3. Socket.io for comments: users can post comment/change/delete it
-4. Logout functionality
-5. Attach a list of users who like a post to that post
-6. Create a draft state of a post, saved in db but not published
+3. Logout functionality
+4. Attach a list of users who like a post to that post
+5. Create a draft state of a post, saved in db but not published

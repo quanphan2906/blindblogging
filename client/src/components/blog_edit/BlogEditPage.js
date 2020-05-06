@@ -111,7 +111,7 @@ function BlogEditPage({ history, match }) {
             }
 
             const {
-                data: { message, post },
+                data: { message },
             } = res;
 
             if (message === "success") {

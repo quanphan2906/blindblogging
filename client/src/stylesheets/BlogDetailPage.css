@@ -181,3 +181,32 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .comments-wrapper
+    .comment-container
+    .action-containers {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .comments-wrapper
+    .comment-container
+    .action-containers
+    div {
+    margin: 0px 4px;
+}
+
+.blog-detail-page
+    .blog-detail-wrapper
+    .comment-list-wrapper
+    .comments-wrapper
+    .reply-container {
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Author from "./Author";
 import BlogDetail from "./BlogDetail";
 import CommentList from "./comments/CommentList";
 import Loader from "../common/Loader";
 import Axios from "axios";
-import endpoints, { PORT } from "../../api_config/endpoints";
+import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
 import { Redirect } from "react-router-dom";
-import io from "socket.io-client";
-
-var socket;
+import { SocketContext } from "../../contexts/SocketContext";
 
 function BlogDetailPage(props) {
+    const { socket } = useContext(SocketContext);
     const [post, setPost] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
@@ -37,22 +36,46 @@ function BlogDetailPage(props) {
     }, [props.match.params.id]);
 
     useEffect(() => {
-        socket = io(PORT);
-
-        socket.on("newCommentData", (newComment) => {
+        if (!socket) return;
+        socket.on("newCommentData", ({ populatedComment }) => {
             setPost((post) => {
                 return {
                     ...post,
-                    comments: [...post.comments, newComment],
+                    comments: [populatedComment, ...post.comments],
                 };
             });
         });
 
         socket.on("newLike", () => {
             setPost((post) => {
+                const currentLikeNum = post.likes || 0;
                 return {
                     ...post,
-                    likes: post.likes + 1,
+                    likes: currentLikeNum + 1,
+                };
+            });
+        });
+
+        socket.on("changeCommentData", ({ newComment }) => {
+            setPost((post) => {
+                const comments = post.comments.map((comment) => {
+                    if (comment._id === newComment._id) return newComment;
+                    return comment;
+                });
+
+                return { ...post, comments };
+            });
+        });
+
+        socket.on("deleteCommentData", ({ deletedComment }) => {
+            setPost((post) => {
+                const comments = post.comments.filter((comment) => {
+                    return comment._id !== deletedComment._id;
+                });
+
+                return {
+                    ...post,
+                    comments,
                 };
             });
         });
@@ -60,7 +83,7 @@ function BlogDetailPage(props) {
         return () => {
             socket.disconnect();
         };
-    }, []);
+    }, [socket]);
 
     if (isLoading) return <Loader />;
     if (isError) return <Redirect to="/" />;
@@ -83,7 +106,6 @@ function BlogDetailPage(props) {
                         likes={post.likes}
                         comments={post.comments}
                         postId={post._id}
-                        socket={socket}
                     />
                 </main>
             </div>

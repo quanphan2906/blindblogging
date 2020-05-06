@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import BlogSummary from "./BlogSummary";
 import PageNav from "./PageNav";
 import NoMatchPage from "../common/NoMatchPage";
@@ -7,8 +7,10 @@ import Axios from "axios";
 import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
 import Loader from "../common/Loader";
+import { SocketContext } from "../../contexts/SocketContext";
 
 function BlogList({ role, location, page }) {
+    const { socket } = useContext(SocketContext);
     const [postList, setPostList] = useState({});
     const [totalPage, setTotalPage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +56,48 @@ function BlogList({ role, location, page }) {
             query.get("search")
         );
     }, [location.search]);
+
+    useEffect(() => {
+        if (!socket) return;
+        socket.on("newCommentData", ({ populatedComment }) => {
+            setPostList((postList) => {
+                return postList.map((post) => {
+                    if (post._id === populatedComment.post) {
+                        post.commentLength += 1;
+                    }
+                    return post;
+                });
+            });
+        });
+
+        socket.on("deleteCommentData", ({ deletedComment }) => {
+            setPostList((postList) => {
+                return postList.map((post) => {
+                    if (post._id === deletedComment.post) {
+                        post.commentLength -= 1;
+                    }
+                    return post;
+                });
+            });
+        });
+
+        socket.on("newLike", ({ postId }) => {
+            setPostList((postList) => {
+                const newPostList = postList.map((post) => {
+                    console.log(post);
+                    if (post._id === postId) {
+                        post.likes += 1;
+                    }
+                    return post;
+                });
+                return newPostList;
+            });
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [socket]);
 
     if (isLoading) return <Loader />;
     if (postList.length === 0) return <NoMatchPage />;

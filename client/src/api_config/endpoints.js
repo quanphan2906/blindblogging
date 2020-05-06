@@ -10,7 +10,7 @@ const endpoints = {
     CREATE_POST: () => `${PORT}/api/posts/create`,
     GET_POST_ID: (id) => `${PORT}/api/posts/${id}`,
     PUT_POST_ID: (id) => `${PORT}/api/posts/${id}`,
-    GET_COMMENTS: (postId) => `${PORT}/api/comments/${postId}`,
+    GET_COMMENTS: () => `${PORT}/api/comments/`,
     GET_IMAGE: (fileUrl) => `${PORT}/api/${fileUrl}`,
 };
 

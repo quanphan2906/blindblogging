@@ -13,7 +13,11 @@ import jwtToStorage from "../../helpers/jwtToStorage";
 function Auth(props) {
     const authState = props.authState;
 
-    const { handleAuthChange, auth: authContext } = useContext(AuthContext);
+    const {
+        handleAuthChange,
+        auth: authContext,
+        handleTokenChange,
+    } = useContext(AuthContext);
 
     const [auth, setAuth] = useState({
         email: "",
@@ -31,7 +35,7 @@ function Auth(props) {
         if (authContext) {
             props.history.push("/blogs");
         }
-    }, [authContext]);
+    }, [authContext, props.history]);
 
     const handleChange = (e) => {
         setError({ email: "", password: "" });
@@ -68,8 +72,8 @@ function Auth(props) {
                     data: { user },
                 } = res;
 
+                handleTokenChange(token);
                 handleAuthChange(user);
-                return;
             };
 
             if (authState === "signup") {
@@ -83,7 +87,7 @@ function Auth(props) {
                     } = res;
 
                     if (message === "success") {
-                        handleSuccessAuth(token, expiresIn);
+                        return handleSuccessAuth(token, expiresIn);
                     }
 
                     if (message === "existedEmail") {
@@ -110,7 +114,7 @@ function Auth(props) {
                     } = res;
 
                     if (message === "success") {
-                        handleSuccessAuth(token, expiresIn);
+                        return handleSuccessAuth(token, expiresIn);
                     }
 
                     if (message === "notRegistered") {

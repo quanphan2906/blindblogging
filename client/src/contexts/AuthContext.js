@@ -63,9 +63,20 @@ function AuthContextProvider(props) {
         setAuth(newAuth);
     };
 
+    const handleTokenChange = (newToken) => {
+        setToken(newToken);
+    };
+
     return (
         <AuthContext.Provider
-            value={{ auth, isLoading, handleAuthChange, token }}
+            value={{
+                auth,
+                isLoading,
+                handleAuthChange,
+                token,
+                handleTokenChange,
+                error,
+            }}
         >
             {props.children}
         </AuthContext.Provider>

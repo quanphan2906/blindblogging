@@ -2,14 +2,16 @@ import React from "react";
 import endpoints from "../../../api_config/endpoints";
 import Button from "../../common/Button";
 
-function NewComment({
+function EditComment({
     auth: { name = "", profileImageUrl = "", altText = "" },
-    newComment,
+    content,
     handleChange,
     handleSubmit,
+    action,
+    width = "100%",
 }) {
     return (
-        <div className="comment-container">
+        <div className="comment-container" style={{ width }}>
             <div className="side-info">
                 <div className="commentor-info">
                     <div className="avatar">
@@ -26,13 +28,13 @@ function NewComment({
                 </div>
             </div>
             <textarea
-                value={newComment}
+                value={content}
                 placeholder="Write a comment..."
                 onChange={handleChange}
             ></textarea>
             <div className="button-container">
                 <Button
-                    action="Post comment"
+                    action={action}
                     color="red"
                     handleClick={handleSubmit}
                 />
@@ -41,4 +43,4 @@ function NewComment({
     );
 }
 
-export default NewComment;
+export default EditComment;

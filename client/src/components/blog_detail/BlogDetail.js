@@ -16,11 +16,15 @@ function BlogDetail({
             <div className="subtitle"> {subtitle}</div>
             <div className="topic">Topic: {topic} </div>
             <div className="cover-image-container">
-                <img
-                    src={postImageUrl ? endpoints.GET_IMAGE(postImageUrl) : ""}
-                    alt={altText ? altText : ""}
-                    className="cover-image"
-                />
+                {postImageUrl ? (
+                    <img
+                        src={endpoints.GET_IMAGE(postImageUrl)}
+                        alt={altText ? altText : ""}
+                        className="cover-image"
+                    />
+                ) : (
+                    false
+                )}
             </div>
             <div className="content"> {HTMLParser(content)} </div>
         </div>

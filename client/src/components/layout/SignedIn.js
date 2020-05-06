@@ -5,8 +5,8 @@ import { withRouter, Link } from "react-router-dom";
 
 function SignedIn({ auth, handleAuthChange, history }) {
     useEffect(() => {
-        history.push("/blogs");
-    }, [auth]);
+        if (!auth) history.push("/blogs");
+    }, [auth, history]);
 
     const handleLogout = () => {
         localStorage.removeItem("JWT token");

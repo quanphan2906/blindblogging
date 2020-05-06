@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Slogan from "./blogs_page/Slogan";
 import Search from "../common/Search";
 import FilterBar from "./blogs_page/FilterBar";
