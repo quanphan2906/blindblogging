@@ -102,6 +102,7 @@ router.post(
                 author,
                 postImageUrl,
                 likes: 0,
+                likers: [],
             });
 
             res.json({ message: "success", post: newPost._doc });
@@ -143,10 +144,11 @@ router
 
             post.comments = await CommentModel.find({
                 post: post._id,
+                isReplyComment: false,
             })
                 .sort({ createdAt: -1 })
                 .populate("commentor", "name profileImageUrl altText updatedAt")
-                .exec(); //TODO: test this when writing comment routes
+                .exec();
 
             res.json({ post });
         } catch (err) {
@@ -175,7 +177,6 @@ router
         }
     })
     .delete(async (req, res, next) => {
-        //delete comments and image in uploads folder of this post also
         try {
             const post = res.locals.post;
 
@@ -183,7 +184,7 @@ router
                 fs.unlinkSync(post.postImageUrl);
             }
 
-            await CommentModel.deleteMany({ post: post._id }); //TODO: test this when writing comment routes
+            await CommentModel.deleteMany({ post: post._id });
 
             await PostModel.findByIdAndDelete(req.params.id);
 

@@ -7,6 +7,7 @@ const CommentSchema = new Schema(
         commentor: { type: Schema.Types.ObjectId, ref: "User", required: true },
         content: { type: String, required: true },
         originalComment: { type: Schema.Types.ObjectId, ref: "Comment" },
+        isReplyComment: { type: Boolean, required: true },
     },
     {
         timestamps: true,

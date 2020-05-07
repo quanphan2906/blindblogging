@@ -12,6 +12,7 @@ module.exports = (io, socket) => {
                     post: postId,
                     commentor,
                     content,
+                    isReplyComment: false,
                 });
 
                 const populatedComment = await comment
@@ -73,21 +74,22 @@ module.exports = (io, socket) => {
     socket.on(
         "newReplyComment",
         async (
-            { commentId, authContext, newReplyContent: content },
+            { originalCommentId, auth, newReplyContent: content },
             callback
         ) => {
             try {
                 const originalComment = await CommentModel.findById(
-                    commentId
+                    originalCommentId
                 ).exec();
 
                 const { post } = originalComment;
 
                 let newReplyCommentData = await CommentModel.create({
                     post,
-                    commentor: authContext._id,
+                    commentor: auth._id,
                     content,
-                    originalComment: commentId,
+                    originalComment: originalCommentId,
+                    isReplyComment: true,
                 });
 
                 newReplyCommentData = await newReplyCommentData

@@ -1,64 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
-import endpoints from "../../../api_config/endpoints";
+import React, { useState, useContext } from "react";
 import Button from "../../common/Button";
 import EditComment from "./EditComment";
 import { AuthContext } from "../../../contexts/AuthContext";
-import Axios from "axios";
-import errorHandler from "../../../api_config/errorHandler";
-import { SocketContext } from "../../../contexts/SocketContext";
+import socket from "../../../singletons/socket";
 import SideInfo from "./SideInfo";
+import ReplyCommentList from "./ReplyCommentList";
 
-function Comment({ comment, auth, isReplyComment = false }) {
-    const { token, auth: authContext } = useContext(AuthContext);
-    const { socket } = useContext(SocketContext);
+function Comment({ comment }) {
+    const { token, auth } = useContext(AuthContext);
 
-    const { commentor, content, _id: commentId } = comment;
+    const { commentor, content } = comment;
     const { name, profileImageUrl, altText } = commentor;
 
     const [isEditState, setIsEditState] = useState(false);
     const [currentContent, setCurrentContent] = useState(comment.content);
 
-    const [replyComments, setReplyComments] = useState([]);
-
     const [isReplyState, setIsReplyState] = useState(false);
-    const [newReplyContent, setNewReplyContent] = useState("");
-
-    useEffect(() => {
-        const fetchReplyComment = async (commentId) => {
-            try {
-                const res = await Axios.get(endpoints.GET_COMMENTS(), {
-                    params: { commentId },
-                });
-
-                const {
-                    data: { comments },
-                } = res;
-
-                setReplyComments(comments);
-            } catch (err) {
-                errorHandler(err);
-            }
-        };
-        fetchReplyComment(commentId);
-    }, [commentId]);
-
-    useEffect(() => {
-        if (!socket) return;
-
-        socket.on("newReplyCommentData", ({ newReplyCommentData }) => {
-            const { originalComment } = newReplyCommentData;
-            if (originalComment === commentId) {
-                setReplyComments((prevState) => {
-                    return [...prevState, newReplyCommentData];
-                });
-                setIsReplyState(false);
-            }
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, [socket, commentId]);
 
     const handleEdit = () => {
         setIsEditState(true);
@@ -101,22 +58,6 @@ function Comment({ comment, auth, isReplyComment = false }) {
 
     const handleReply = () => {
         setIsReplyState(true);
-    };
-
-    const handleReplyChange = (e) => {
-        setNewReplyContent(e.target.value);
-    };
-
-    const handleReplySubmit = (e) => {
-        e.preventDefault();
-
-        socket.emit(
-            "newReplyComment",
-            { commentId, authContext, newReplyContent },
-            (err) => {
-                console.log(err);
-            }
-        );
     };
 
     if (isEditState)
@@ -168,44 +109,19 @@ function Comment({ comment, auth, isReplyComment = false }) {
                     ) : (
                         false
                     )}
-                    {isReplyComment === false ? (
-                        <Button
-                            action="Reply"
-                            color="red"
-                            fontSize="16px"
-                            handleClick={handleReply}
-                        />
-                    ) : (
-                        false
-                    )}
+                    <Button
+                        action="Reply"
+                        color="red"
+                        fontSize="16px"
+                        handleClick={handleReply}
+                    />
                 </div>
             </div>
-            {isReplyComment === false ? (
-                <div className="reply-container">
-                    {isReplyState === true && auth ? (
-                        <EditComment
-                            auth={authContext}
-                            action="Post reply comment"
-                            handleChange={handleReplyChange}
-                            handleSubmit={handleReplySubmit}
-                            content={newReplyContent}
-                            width="80%"
-                        />
-                    ) : (
-                        false
-                    )}
-                    {replyComments.map((comment) => (
-                        <Comment
-                            key={comment._id}
-                            comment={comment}
-                            auth={auth}
-                            isReplyComment={true}
-                        />
-                    ))}
-                </div>
-            ) : (
-                false
-            )}
+            <ReplyCommentList
+                originalCommentId={comment._id}
+                setIsReplyState={setIsReplyState}
+                isReplyState={isReplyState}
+            />
         </>
     );
 }

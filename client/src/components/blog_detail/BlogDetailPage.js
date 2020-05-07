@@ -8,10 +8,11 @@ import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
 import { Redirect } from "react-router-dom";
 import { SocketContext } from "../../contexts/SocketContext";
+// import socket from "../../singletons/socket";
 
 function BlogDetailPage(props) {
-    const { socket } = useContext(SocketContext);
     const [post, setPost] = useState({});
+    const { socket } = useContext(SocketContext);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
 
@@ -38,52 +39,60 @@ function BlogDetailPage(props) {
     useEffect(() => {
         if (!socket) return;
         socket.on("newCommentData", ({ populatedComment }) => {
-            setPost((post) => {
-                return {
-                    ...post,
-                    comments: [populatedComment, ...post.comments],
-                };
-            });
+            if (post._id === populatedComment.post) {
+                setPost((post) => {
+                    return {
+                        ...post,
+                        comments: [populatedComment, ...post.comments],
+                    };
+                });
+            }
         });
 
-        socket.on("newLike", () => {
-            setPost((post) => {
-                const currentLikeNum = post.likes || 0;
-                return {
-                    ...post,
-                    likes: currentLikeNum + 1,
-                };
-            });
+        socket.on("newLike", ({ postId }) => {
+            if (post._id === postId) {
+                setPost((post) => {
+                    const currentLikeNum = post.likes || 0;
+                    return {
+                        ...post,
+                        likes: currentLikeNum + 1,
+                    };
+                });
+            }
         });
 
         socket.on("changeCommentData", ({ newComment }) => {
-            setPost((post) => {
-                const comments = post.comments.map((comment) => {
-                    if (comment._id === newComment._id) return newComment;
-                    return comment;
-                });
+            if (post._id === newComment.post) {
+                setPost((post) => {
+                    const comments = post.comments.map((comment) => {
+                        if (comment._id === newComment._id) return newComment;
+                        return comment;
+                    });
 
-                return { ...post, comments };
-            });
+                    return { ...post, comments };
+                });
+            }
         });
 
         socket.on("deleteCommentData", ({ deletedComment }) => {
-            setPost((post) => {
-                const comments = post.comments.filter((comment) => {
-                    return comment._id !== deletedComment._id;
-                });
+            if (post._id === deletedComment.post) {
+                setPost((post) => {
+                    const comments = post.comments.filter((comment) => {
+                        return comment._id !== deletedComment._id;
+                    });
 
-                return {
-                    ...post,
-                    comments,
-                };
-            });
+                    return {
+                        ...post,
+                        comments,
+                    };
+                });
+            }
         });
 
         return () => {
             socket.disconnect();
         };
-    }, [socket]);
+    }, [socket, post._id]);
 
     if (isLoading) return <Loader />;
     if (isError) return <Redirect to="/" />;
@@ -106,6 +115,7 @@ function BlogDetailPage(props) {
                         likes={post.likes}
                         comments={post.comments}
                         postId={post._id}
+                        likers={post.likers}
                     />
                 </main>
             </div>

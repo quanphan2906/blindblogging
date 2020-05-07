@@ -4,13 +4,16 @@ import Comment from "./Comment";
 import { AuthContext } from "../../../contexts/AuthContext";
 import EditComment from "./EditComment";
 import { Link } from "react-router-dom";
+import Likers from "./Likers";
 import { SocketContext } from "../../../contexts/SocketContext";
+// import socket from "../../../singletons/socket";
 
-function CommentList({ likes, comments, postId, width = "100%" }) {
+function CommentList({ likes, comments, postId, width = "100%", likers }) {
     const { auth } = useContext(AuthContext);
     const { socket } = useContext(SocketContext);
 
     const [newComment, setNewComment] = useState("");
+    const [isLikerCompOpen, setIsLikerCompOpen] = useState(false);
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
@@ -36,14 +39,25 @@ function CommentList({ likes, comments, postId, width = "100%" }) {
     };
 
     const handleLike = (e) => {
-        //in the future -> save a list of likers
-        //if the person has liked the post -> no more like
         if (auth._id) {
-            socket.emit("like", { postId }, (err) => {
-                console.log(err);
-            });
+            let hasLiked = false;
+            for (let liker of likers) {
+                if (auth._id === liker) hasLiked = true;
+            }
+
+            if (hasLiked === false) {
+                socket.emit("like", { postId, userId: auth._id }, (err) => {
+                    console.log(err);
+                });
+            } else return null;
         }
     };
+
+    const handleSeeLikers = (state) => {
+        setIsLikerCompOpen(state);
+    };
+
+    if (isLikerCompOpen) return <Likers likers={likers} />;
 
     return (
         <div className="comment-list-wrapper" style={{ width }}>
@@ -51,6 +65,14 @@ function CommentList({ likes, comments, postId, width = "100%" }) {
                 <div>
                     <h1>Likes</h1>
                     <span> {likes ? likes : 0} </span>
+                    <Button
+                        action="See people like this post"
+                        color="orange"
+                        fontSize="14px"
+                        handleClick={() => {
+                            handleSeeLikers(true);
+                        }}
+                    />
                 </div>
                 {auth ? (
                     <Button
@@ -77,11 +99,7 @@ function CommentList({ likes, comments, postId, width = "100%" }) {
                         false
                     )}
                     {comments.map((comment) => (
-                        <Comment
-                            key={comment._id}
-                            comment={comment}
-                            auth={auth}
-                        />
+                        <Comment key={comment._id} comment={comment} />
                     ))}
                 </div>
             </div>

@@ -8,6 +8,7 @@ import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
 import Loader from "../common/Loader";
 import { SocketContext } from "../../contexts/SocketContext";
+// import socket from "../../singletons/socket";
 
 function BlogList({ role, location, page }) {
     const { socket } = useContext(SocketContext);

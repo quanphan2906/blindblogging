@@ -23,6 +23,7 @@ const UserSchema = new Schema(
         altText: { type: String },
         occupation: { type: String, trim: true },
         description: { type: String, trim: true },
+        likedPost: [{ type: Schema.Types.ObjectId, ref: "Post" }],
     },
     {
         timestamps: true,

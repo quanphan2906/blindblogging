@@ -207,6 +207,6 @@
     .comment-list-wrapper
     .comments-wrapper
     .reply-container {
-    display: flex;
-    justify-content: flex-end;
+    width: 80%;
+    padding-left: 20%;
 }
