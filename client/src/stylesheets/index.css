@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
-@import "./Loader.css";
-@import "./Modal.css";
+@import "./loader.css";
+@import "./modal.css";
 @import "./Button.css";
 @import "./BlogEditPage.css";
 @import "./Auth.css";

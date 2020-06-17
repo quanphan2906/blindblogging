@@ -6,7 +6,7 @@ const checkAuth = require("../helpers/checkAuth");
 const upload = require("../helpers/multerConfig");
 const signJwt = require("../helpers/signJwt");
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const fs = require("fs");
 
 //create new user
