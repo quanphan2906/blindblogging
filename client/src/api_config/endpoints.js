@@ -1,4 +1,13 @@
-export const PORT = "http://localhost:5000";
+var PORT;
+if (process.env.NODE_ENV === "development") {
+    PORT = `http://localhost:5000`;
+} else {
+    if (process.env.NODE_ENV === "production") {
+        PORT = `https://blindblogging.herokuapp.com`;
+    }
+}
+
+export { PORT };
 
 const endpoints = {
     REGISTER_USER: () => `${PORT}/api/users/register`,
