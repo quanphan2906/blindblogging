@@ -6,6 +6,7 @@ import errorHandler from "../../../api_config/errorHandler";
 import Axios from "axios";
 import endpoints from "../../../api_config/endpoints";
 import Search from "../../common/Search";
+import { Link } from "react-router-dom";
 
 function Profile({ match }) {
     const [author, setAuthor] = useState({});
@@ -36,6 +37,10 @@ function Profile({ match }) {
         <div className="profile-page-wrapper">
             <Author author={author} />
             <main className="profile-page-container">
+                <div>
+                    <h1>Create a post</h1>
+                    <Link to="/create">Go to create post page</Link>
+                </div>
                 <h1>Your past posts</h1>
                 <Search />
                 {/* add select form here when add draft functionality */}
