@@ -10,11 +10,15 @@ import Loader from "../common/Loader";
 import { SocketContext } from "../../contexts/SocketContext";
 // import socket from "../../singletons/socket";
 
-function BlogList({ role, location, page }) {
+const NO_POST_MESSAGE = "You have not had any posts";
+const NOT_FOUND_MESSAGE = "Sorry, we cannot find what you are looking for";
+
+function BlogList({ role, location, page, match }) {
     const { socket } = useContext(SocketContext);
-    const [postList, setPostList] = useState({});
+    const [postList, setPostList] = useState([]);
     const [totalPage, setTotalPage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [message, setMessage] = useState(NOT_FOUND_MESSAGE);
 
     useEffect(() => {
         const fetchPostList = async (
@@ -47,16 +51,45 @@ function BlogList({ role, location, page }) {
             }
         };
 
+        const fetchUserPosts = async (userId) => {
+            try {
+                const res = await Axios.get(endpoints.GET_POSTS(), {
+                    params: {
+                        userId,
+                    },
+                });
+
+                const {
+                    data: { posts, totalPage },
+                } = res;
+
+                if (totalPage != 0) {
+                    setPostList(posts);
+                    setTotalPage(totalPage);
+                } else {
+                    console.log("yo");
+                    setMessage(NO_POST_MESSAGE);
+                }
+                setIsLoading(false);
+            } catch (err) {
+                errorHandler(err);
+            }
+        };
+
         const query = new URLSearchParams(location.search);
 
-        fetchPostList(
-            query.get("pageNum"),
-            true,
-            query.get("isMostRecent"),
-            query.get("topic"),
-            query.get("search")
-        );
-    }, [location.search]);
+        if (match.params.id) {
+            fetchUserPosts(match.params.id);
+        } else {
+            fetchPostList(
+                query.get("pageNum"),
+                true,
+                query.get("isMostRecent"),
+                query.get("topic"),
+                query.get("search")
+            );
+        }
+    }, [location.search, match.params.id]);
 
     useEffect(() => {
         if (!socket) return;
@@ -101,7 +134,7 @@ function BlogList({ role, location, page }) {
     }, [socket]);
 
     if (isLoading) return <Loader />;
-    if (postList.length === 0) return <NoMatchPage />;
+    if (postList.length === 0) return <NoMatchPage message={message} />;
 
     return (
         <div className="blog-list-wrapper">

@@ -1,9 +1,11 @@
 import React from "react";
 
-function NoMatchPage() {
+function NoMatchPage({
+    message = "Sorry, we can't find what you are looking for",
+}) {
     return (
         <div>
-            <div>Sorry, we can't find what you are looking for</div>
+            <div> {message} </div>
         </div>
     );
 }

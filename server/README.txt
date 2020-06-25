@@ -32,7 +32,7 @@ JWT token needs to be included in the Authorization field of request header as "
 1. /api/posts/ (GET):
     QUERY_1: pageName, limit, topic
     RETURN DATA _1: posts
-    QUERY_2: pageNum, resPerPage, topic (OPTIONAL), searchString (OPTIONAL), isMostRecent (OPTIONAL, default to true)
+    QUERY_2: pageNum, resPerPage, topic (OPTIONAL, no default), searchString (OPTIONAL), isMostRecent (default to true), userId (OPTIONAL, no default), isCommentLength(default to true)
     RETURN DATA _2: posts, totalPage
 
 2. /api/posts/create (POST):
