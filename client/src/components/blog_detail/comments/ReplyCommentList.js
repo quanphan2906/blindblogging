@@ -76,6 +76,12 @@ function ReplyCommentList({
         });
     }, [originalCommentId, setIsReplyState, socket]);
 
+    useEffect(() => {
+        return () => {
+            socket.disconnect();
+        };
+    }, [socket]);
+
     const handleReplyChange = (e) => {
         setNewReplyContent(e.target.value);
     };
