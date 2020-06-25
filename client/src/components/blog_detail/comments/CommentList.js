@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../../common/Button";
 import Comment from "./Comment";
 import { AuthContext } from "../../../contexts/AuthContext";
