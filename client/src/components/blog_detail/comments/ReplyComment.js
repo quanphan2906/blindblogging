@@ -16,12 +16,6 @@ function ReplyComment({ comment }) {
     const [isEditState, setIsEditState] = useState(false);
     const [currentContent, setCurrentContent] = useState(comment.content);
 
-    useEffect(() => {
-        return () => {
-            socket.disconnect();
-        };
-    }, [socket]);
-
     const handleEdit = () => {
         setIsEditState(true);
     };

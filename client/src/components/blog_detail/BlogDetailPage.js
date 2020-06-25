@@ -88,13 +88,11 @@ function BlogDetailPage(props) {
                 });
             }
         });
-    }, [socket, post._id]);
 
-    useEffect(() => {
         return () => {
             socket.disconnect();
         };
-    }, [socket]);
+    }, [socket, post._id]);
 
     if (isLoading) return <Loader />;
     if (isError) return <Redirect to="/" />;

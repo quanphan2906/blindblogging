@@ -15,12 +15,6 @@ function CommentList({ likes, comments, postId, width = "100%", likers }) {
     const [newComment, setNewComment] = useState("");
     const [isLikerCompOpen, setIsLikerCompOpen] = useState(false);
 
-    useEffect(() => {
-        return () => {
-            socket.disconnect();
-        };
-    }, [socket]);
-
     const handleChange = (e) => {
         setNewComment(e.target.value);
     };

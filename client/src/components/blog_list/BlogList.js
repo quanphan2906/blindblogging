@@ -94,9 +94,7 @@ function BlogList({ role, location, page }) {
                 return newPostList;
             });
         });
-    }, [socket]);
 
-    useEffect(() => {
         return () => {
             socket.disconnect();
         };
