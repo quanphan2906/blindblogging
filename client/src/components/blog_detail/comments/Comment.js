@@ -2,12 +2,13 @@ import React, { useState, useContext } from "react";
 import Button from "../../common/Button";
 import EditComment from "./EditComment";
 import { AuthContext } from "../../../contexts/AuthContext";
-import socket from "../../../singletons/socket";
+import { SocketContext } from "../../../contexts/SocketContext";
 import SideInfo from "./SideInfo";
 import ReplyCommentList from "./ReplyCommentList";
 
 function Comment({ comment }) {
     const { token, auth } = useContext(AuthContext);
+    const { socket } = useContext(SocketContext);
 
     const { commentor, content } = comment;
     const { name, profileImageUrl, altText } = commentor;
