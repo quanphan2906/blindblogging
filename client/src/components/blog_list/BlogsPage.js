@@ -13,7 +13,7 @@ function BlogsPage() {
             <div className="blogs-page-container">
                 <aside className="blogs-page-sidebar">
                     <FilterBar />
-                    <FeaturePost />
+                    {/* <FeaturePost /> */}
                 </aside>
                 <main>
                     <h2>Posts</h2>
