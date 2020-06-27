@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 import endpoints from "../../../api_config/endpoints";
 import Loader from "../../common/Loader";
+import endsWith from "../../../helpers/checkEndsWith";
+import Button from "../../common/Button";
 
-function Likers({ likers }) {
+const PLACEHOLDER_URL = "https://picsum.photos/200/300";
+const UNDEFINED_STR = "undefined";
+const BUTTON_ACTION = "Back to comment";
+
+function Likers({ likers, handleSeeLikers }) {
     const [likerList, setLikerList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,14 +39,23 @@ function Likers({ likers }) {
     if (isLoading) return <Loader />;
 
     return (
-        <div>
+        <div className="likers-container">
+            <div>
+                <Button
+                    action={BUTTON_ACTION}
+                    handleClick={() => {
+                        handleSeeLikers(true);
+                    }}
+                    color="red"
+                />
+            </div>
             {likerList.map((liker) => {
+                const imageUrl = endpoints.GET_IMAGE(liker.profileImageUrl);
+                const isUndefinedImg = endsWith(imageUrl, UNDEFINED_STR);
                 return (
                     <div key={liker._id}>
                         <img
-                            src={
-                                endpoints.GET_IMAGE(liker.profileImageUrl) || ""
-                            }
+                            src={isUndefinedImg ? PLACEHOLDER_URL : imageUrl}
                             alt={liker.altText}
                         />
                         <div>{liker.name}</div>

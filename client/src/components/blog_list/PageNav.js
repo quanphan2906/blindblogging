@@ -33,28 +33,33 @@ function PageNav({ history, location, totalPage }) {
     };
 
     const { currentPageNum } = getCurrentPageNum();
+    const pagination = `${currentPageNum} out of ${totalPage} pages`;
 
     return (
         <div className="page-nav-wrapper">
-            <Button
-                action="Previous"
-                color="orange"
-                width="10vw"
-                handleClick={() => {
-                    changePage(true);
-                }}
-            />
-            <span>
-                {currentPageNum} out of {totalPage} pages
-            </span>
-            <Button
-                action="Next"
-                color="orange"
-                width="10vw"
-                handleClick={() => {
-                    changePage(false);
-                }}
-            />
+            <div className="page-nav-container">
+                <div>
+                    <Button
+                        action="Previous"
+                        color="orange"
+                        width="10vw"
+                        handleClick={() => {
+                            changePage(true);
+                        }}
+                    />
+                </div>
+                <div className="page-info">{pagination}</div>
+                <div>
+                    <Button
+                        action="Next"
+                        color="orange"
+                        width="10vw"
+                        handleClick={() => {
+                            changePage(false);
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

@@ -61,6 +61,12 @@
     flex-flow: column;
     width: fit-content;
     height: fit-content;
+    justify-content: center;
+}
+
+.auth-wrapper .auth-container .oauth-button-container .button-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
 }
 
 .auth-wrapper .auth-container .auth-form {

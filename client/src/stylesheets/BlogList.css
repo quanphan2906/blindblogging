@@ -46,6 +46,16 @@
 }
 
 .blog-list-wrapper .page-nav-wrapper {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-top: 2vw;
+}
+
+.blog-list-wrapper .page-nav-container {
+    display: flex;
+    flex-flow: row;
+}
+
+.blog-list-wrapper .page-nav-container .page-info {
+    padding-top: 1em;
 }

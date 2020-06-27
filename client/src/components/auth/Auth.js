@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 import endpoints from "../../api_config/endpoints";
 import errorHandler from "../../api_config/errorHandler";
@@ -140,9 +139,7 @@ function Auth(props) {
     return (
         <main className="auth-wrapper">
             <div className="auth-container">
-                <Intro />
-                <OAuth authState={authState} />
-
+                {/* <Intro /> */}
                 <EmailAndPass
                     authState={authState}
                     handleChange={handleChange}
@@ -150,6 +147,8 @@ function Auth(props) {
                     error={error}
                     formMessage={formMessage}
                 />
+
+                {/* <OAuth authState={authState} /> */}
             </div>
         </main>
     );

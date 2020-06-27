@@ -41,9 +41,9 @@ function CommentList({ likes, comments, postId, width = "100%", likers }) {
     const handleLike = (e) => {
         if (auth._id) {
             let hasLiked = false;
-            for (let liker of likers) {
-                if (auth._id === liker) hasLiked = true;
-            }
+
+            let currentUser = likers.filter((liker) => liker === auth._id);
+            if (currentUser.length != 0) hasLiked = true;
 
             if (hasLiked === false) {
                 socket.emit("like", { postId, userId: auth._id }, (err) => {
@@ -57,7 +57,8 @@ function CommentList({ likes, comments, postId, width = "100%", likers }) {
         setIsLikerCompOpen(state);
     };
 
-    if (isLikerCompOpen) return <Likers likers={likers} />;
+    if (isLikerCompOpen)
+        return <Likers likers={likers} handleSeeLikers={handleSeeLikers} />;
 
     return (
         <div className="comment-list-wrapper" style={{ width }}>

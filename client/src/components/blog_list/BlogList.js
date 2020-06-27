@@ -26,7 +26,8 @@ function BlogList({ role, location, page, match }) {
             isCommentLength = true,
             isMostRecent = true,
             topic = null,
-            searchString = null
+            searchString = null,
+            userId = null
         ) => {
             try {
                 const res = await Axios.get(endpoints.GET_POSTS(), {
@@ -36,6 +37,7 @@ function BlogList({ role, location, page, match }) {
                         isMostRecent,
                         topic,
                         searchString,
+                        userId,
                     },
                 });
 
@@ -51,44 +53,19 @@ function BlogList({ role, location, page, match }) {
             }
         };
 
-        const fetchUserPosts = async (userId) => {
-            try {
-                const res = await Axios.get(endpoints.GET_POSTS(), {
-                    params: {
-                        userId,
-                    },
-                });
-
-                const {
-                    data: { posts, totalPage },
-                } = res;
-
-                if (totalPage != 0) {
-                    setPostList(posts);
-                    setTotalPage(totalPage);
-                } else {
-                    console.log("yo");
-                    setMessage(NO_POST_MESSAGE);
-                }
-                setIsLoading(false);
-            } catch (err) {
-                errorHandler(err);
-            }
-        };
-
         const query = new URLSearchParams(location.search);
+        const userId = match.params.id ? match.params.id : null;
 
-        if (match.params.id) {
-            fetchUserPosts(match.params.id);
-        } else {
-            fetchPostList(
-                query.get("pageNum"),
-                true,
-                query.get("isMostRecent"),
-                query.get("topic"),
-                query.get("search")
-            );
-        }
+        setIsLoading(true);
+
+        fetchPostList(
+            query.get("pageNum"),
+            true,
+            query.get("isMostRecent"),
+            query.get("topic"),
+            query.get("search"),
+            userId
+        );
     }, [location.search, match.params.id]);
 
     useEffect(() => {
