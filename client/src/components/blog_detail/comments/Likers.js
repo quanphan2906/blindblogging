@@ -8,7 +8,7 @@ import Button from "../../common/Button";
 
 const PLACEHOLDER_URL = "https://picsum.photos/200/300";
 const UNDEFINED_STR = "undefined";
-const BUTTON_ACTION = "Back to comment";
+const BUTTON_ACTION = "Back to comment section";
 
 function Likers({ likers, handleSeeLikers }) {
     const [likerList, setLikerList] = useState([]);
@@ -44,7 +44,7 @@ function Likers({ likers, handleSeeLikers }) {
                 <Button
                     action={BUTTON_ACTION}
                     handleClick={() => {
-                        handleSeeLikers(true);
+                        handleSeeLikers(false);
                     }}
                     color="red"
                 />
