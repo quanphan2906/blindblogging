@@ -63,13 +63,3 @@ JWT token needs to be included in the Authorization field of request header as "
 -----IMAGE--------
 1. /api/uploads/:fileUrl (GET):
     RETURN DATA: [image file]
-
-
-----------------------------------
-----------------------------------
-FUTURE UPDATES:
-1. Change CommentModel so that other users can reply to comments
-2. OAuth
-3. Logout functionality
-4. Attach a list of users who like a post to that post
-5. Create a draft state of a post, saved in db but not published
